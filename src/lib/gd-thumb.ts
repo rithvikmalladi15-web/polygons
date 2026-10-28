@@ -10,8 +10,8 @@ export function gdThumbUrls(gdId: string): string[] {
   const id = gdThumbId(gdId);
   if (!id) return [];
   return [
-    `https://img.gamedistribution.com/${id}-512x384.jpeg`,
-    `https://img.gamedistribution.com/${id}-512x512.jpeg`,
-    `https://img.gamedistribution.com/${id}-512x384.jpg`,
+    `/_gd/img/${id}-512x384.jpeg`,
+    `/_gd/img/${id}-512x512.jpeg`,
+    `/_gd/img/${id}-512x384.jpg`,
   ];
 }

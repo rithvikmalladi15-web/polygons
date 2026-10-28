@@ -1,12 +1,21 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { classicBySlug } from "./classics";
 import { SITE_NAME } from "./brand";
 import { Nav } from "./components/Nav";
 import { Link, replace, useLocationKey } from "./route";
-import { ClassicPlay } from "./views/ClassicPlay";
-import { Home } from "./views/Home";
-import { Library } from "./views/Library";
-import { AdminPlayStats } from "./views/AdminPlayStats";
+
+const Home = lazy(() => import("./views/Home").then((m) => ({ default: m.Home })));
+const Library = lazy(() => import("./views/Library").then((m) => ({ default: m.Library })));
+const ClassicPlay = lazy(() => import("./views/ClassicPlay").then((m) => ({ default: m.ClassicPlay })));
+const AdminPlayStats = lazy(() => import("./views/AdminPlayStats").then((m) => ({ default: m.AdminPlayStats })));
+
+function PageLoading() {
+  return (
+    <div className="wrap" aria-busy="true">
+      <p className="hint">Loading…</p>
+    </div>
+  );
+}
 
 export function App() {
   const key = useLocationKey();
@@ -50,7 +59,9 @@ export function App() {
         Skip to content
       </a>
       <Nav />
-      <main id="content">{view}</main>
+      <main id="content">
+        <Suspense fallback={<PageLoading />}>{view}</Suspense>
+      </main>
     </div>
   );
 }

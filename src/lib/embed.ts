@@ -4,6 +4,8 @@ import { localGamePath, proxyPath, siteOrigin } from "./game-origin";
 
 const GD_HOME = "https://gamedistribution.com/";
 
+const embedCandidateCache = new Map<string, string[]>();
+
 /** Folder URLs must hit index.html on abc/GD/github — not on Nitrome CDN. */
 function withIndexHtml(external: string): string {
   if (!external || external.includes("embed.gamedistribution.com/?")) return external;
@@ -42,6 +44,9 @@ function pushUnique(out: string[], url: string) {
  * In-site player URLs — same-origin (/games, /_abc, /_gd, /_ext) so games run on Polygons.
  */
 export function classicEmbedCandidates(game: ClassicGame): string[] {
+  const cached = embedCandidateCache.get(game.slug);
+  if (cached) return cached;
+
   const out: string[] = [];
 
   const local = localGamePath(game.slug);
@@ -75,7 +80,9 @@ export function classicEmbedCandidates(game: ClassicGame): string[] {
 
   const normalized = out.map((url) => (url.startsWith("http") ? finalizeProxyPath(proxyPath(url)) : url));
   const sameOrigin = normalized.filter((url) => url.startsWith("/"));
-  return sameOrigin.length ? sameOrigin : normalized;
+  const result = sameOrigin.length ? sameOrigin : normalized;
+  embedCandidateCache.set(game.slug, result);
+  return result;
 }
 
 export function classicEmbedSrc(game: ClassicGame): string {

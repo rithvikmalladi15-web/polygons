@@ -14,7 +14,8 @@
     "covers:fetch": "node scripts/fetch-covers.mjs",
     "proxy:sync": "node scripts/sync-proxy-routes.mjs",
     "proxy:discover": "node scripts/discover-embed-hosts.mjs && npm run proxy:sync",
-    "verify:live": "node scripts/verify-bundle-live.mjs",
+    "verify": "npm run build && npx tsx scripts/verify-bundle-live.mjs",
+    "verify:live": "npx tsx scripts/verify-bundle-live.mjs",
     "build:vercel-hosted": "node scripts/mirror-abc.mjs --catalog --skip-existing && npm run build"
   },
   "dependencies": {

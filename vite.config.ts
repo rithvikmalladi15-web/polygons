@@ -27,6 +27,13 @@ export default defineConfig({
   build: {
     target: "es2022",
     cssCodeSplit: false,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules/react-dom") || id.includes("node_modules/react/")) return "vendor";
+        },
+      },
+    },
   },
   server: {
     port: 5173,

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { ClassicGame, ClassicShelf } from "../classics";
 import { GameThumb } from "./GameThumb";
 import { Link, rememberClassicReturn } from "../route";
@@ -18,7 +19,12 @@ type Props = {
   playTarget?: "page" | "dock";
 };
 
-export function GamePickCard({ game, as = "link", priorityThumb = false, playTarget = "page" }: Props) {
+export const GamePickCard = memo(function GamePickCard({
+  game,
+  as = "link",
+  priorityThumb = false,
+  playTarget = "page",
+}: Props) {
   const body = (
     <>
       <GameThumb game={game} priority={priorityThumb} />
@@ -42,4 +48,4 @@ export function GamePickCard({ game, as = "link", priorityThumb = false, playTar
       {body}
     </Link>
   );
-}
+});

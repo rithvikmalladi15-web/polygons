@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { ClassicGame } from "../classics";
 
 type Props = {
@@ -26,16 +26,30 @@ export function GameEmbedFrame({
   ratioStyle,
 }: Props) {
   const [loading, setLoading] = useState(true);
+  const loadedRef = useRef(false);
 
   useEffect(() => {
+    loadedRef.current = false;
     setLoading(true);
     const hint = window.setTimeout(() => onStuck?.(), 8_000);
     const reveal = window.setTimeout(() => setLoading(false), 4_000);
+    const failover =
+      sourceCount > 1 && sourceIndex < sourceCount - 1
+        ? window.setTimeout(() => {
+            if (!loadedRef.current) onLoadError?.();
+          }, 16_000)
+        : undefined;
     return () => {
       window.clearTimeout(hint);
       window.clearTimeout(reveal);
+      if (failover !== undefined) window.clearTimeout(failover);
     };
-  }, [src, onStuck]);
+  }, [src, onStuck, onLoadError, sourceCount, sourceIndex]);
+
+  const finishLoad = () => {
+    loadedRef.current = true;
+    setLoading(false);
+  };
 
   return (
     <div
@@ -64,9 +78,9 @@ export function GameEmbedFrame({
         referrerPolicy="no-referrer-when-downgrade"
         loading="eager"
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-pointer-lock allow-downloads"
-        onLoad={() => setLoading(false)}
+        onLoad={finishLoad}
         onError={() => {
-          setLoading(false);
+          finishLoad();
           onLoadError?.();
         }}
       />
