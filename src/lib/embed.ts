@@ -57,11 +57,6 @@ export function classicEmbedCandidates(game: ClassicGame): string[] {
 
   if (game.gdId) {
     const path = game.gdId.endsWith("/") ? game.gdId : `${game.gdId}/`;
-    pushUnique(
-      out,
-      finalizeProxyPath(proxyPath(withIndexHtml(`https://html5.gamedistribution.com/${path}`))),
-    );
-
     const referrers = new Set<string>([gameDistributionReferrer(game), GD_HOME]);
     for (const referrer of referrers) {
       pushUnique(
@@ -71,6 +66,11 @@ export function classicEmbedCandidates(game: ClassicGame): string[] {
         ),
       );
     }
+
+    pushUnique(
+      out,
+      finalizeProxyPath(proxyPath(withIndexHtml(`https://html5.gamedistribution.com/${path}`))),
+    );
   }
 
   const normalized = out.map((url) => (url.startsWith("http") ? finalizeProxyPath(proxyPath(url)) : url));

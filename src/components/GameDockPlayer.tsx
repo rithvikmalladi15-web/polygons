@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { classicBySlug, classicEmbedCandidates } from "../classics";
+import { GameEmbedFrame } from "./GameEmbedFrame";
 import { Link, go } from "../route";
 
 type Props = {
@@ -11,11 +12,18 @@ export function GameDockPlayer({ slug, onClose }: Props) {
   const game = classicBySlug(slug);
   const candidates = useMemo(() => (game ? classicEmbedCandidates(game) : []), [game]);
   const [sourceIndex, setSourceIndex] = useState(0);
+  const [stuck, setStuck] = useState(false);
   const src = candidates[sourceIndex] ?? "";
 
   useEffect(() => {
     setSourceIndex(0);
+    setStuck(false);
   }, [slug]);
+
+  const tryNextSource = useCallback(() => {
+    setStuck(false);
+    setSourceIndex((index) => Math.min(index + 1, candidates.length - 1));
+  }, [candidates.length]);
 
   if (!game || !src) {
     return (
@@ -36,11 +44,7 @@ export function GameDockPlayer({ slug, onClose }: Props) {
         </div>
         <div className="lib-dock-actions">
           {candidates.length > 1 && (
-            <button
-              type="button"
-              className="btn btn-line btn-sm"
-              onClick={() => setSourceIndex((i) => Math.min(i + 1, candidates.length - 1))}
-            >
+            <button type="button" className="btn btn-line btn-sm" onClick={tryNextSource}>
               Switch source
             </button>
           )}
@@ -53,22 +57,32 @@ export function GameDockPlayer({ slug, onClose }: Props) {
         </div>
       </div>
       <div className="lib-dock-frame" style={{ ["--embed-ratio" as string]: String(ratio) }}>
-        <iframe
-          key={src}
-          className="embed-frame"
-          title={game.name}
+        <GameEmbedFrame
+          game={game}
           src={src}
-          allow="autoplay; fullscreen; gamepad; microphone; camera"
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-pointer-lock allow-downloads"
-          onError={() => {
-            if (sourceIndex < candidates.length - 1) setSourceIndex((i) => i + 1);
-          }}
+          sourceIndex={sourceIndex}
+          sourceCount={candidates.length}
+          stuck={stuck}
+          onStuck={() => setStuck(true)}
+          onLoadError={tryNextSource}
         />
       </div>
+      {stuck && (
+        <p className="hint lib-dock-hint">
+          Still blank?{" "}
+          <button type="button" className="text-btn" onClick={tryNextSource}>
+            Try another source
+          </button>{" "}
+          or{" "}
+          <Link href={`/hit/${game.slug}`} className="text-btn">
+            open full page
+          </Link>
+          .
+        </p>
+      )}
       <p className="hint lib-dock-hint">
-        Same-site player (/_abc, /_gd, /_ext). Source {sourceIndex + 1}/{candidates.length}.
+        Same-site player (/_abc, /_gd, /_ext). Source {sourceIndex + 1}/{candidates.length}. Click inside the
+        frame to play.
       </p>
     </aside>
   );

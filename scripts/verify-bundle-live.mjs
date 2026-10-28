@@ -37,8 +37,20 @@ async function checkGame(game) {
 }
 
 const results = [];
+let badPaths = 0;
 for (const game of CLASSICS) {
+  for (const path of classicEmbedCandidates(game)) {
+    if (path.includes("/_gd/embed/?")) {
+      badPaths++;
+      console.log(JSON.stringify({ slug: game.slug, issue: "broken gd embed path", path }));
+    }
+  }
   results.push(await checkGame(game));
+}
+
+if (badPaths) {
+  console.error(`Broken embed paths: ${badPaths}`);
+  process.exit(1);
 }
 
 const bad = results.filter((r) => !r.ok);
