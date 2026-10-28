@@ -14,9 +14,11 @@ type Props = {
   game: ClassicGame;
   as?: "link" | "div";
   priorityThumb?: boolean;
+  /** library: open in side player (?play=). page: full /hit/ route */
+  playTarget?: "page" | "dock";
 };
 
-export function GamePickCard({ game, as = "link", priorityThumb = false }: Props) {
+export function GamePickCard({ game, as = "link", priorityThumb = false, playTarget = "page" }: Props) {
   const body = (
     <>
       <GameThumb game={game} priority={priorityThumb} />
@@ -33,7 +35,7 @@ export function GamePickCard({ game, as = "link", priorityThumb = false }: Props
 
   return (
     <Link
-      href={`/hit/${game.slug}`}
+      href={playTarget === "dock" ? `/library?play=${encodeURIComponent(game.slug)}` : `/hit/${game.slug}`}
       className="card hit-card game-pick-card"
       onClick={rememberClassicReturn}
     >

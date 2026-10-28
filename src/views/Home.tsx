@@ -22,8 +22,12 @@ const QUESTIONS = [
     a: "No. Pick a game and it plays in this tab. Keyboard, mouse, and touch work in the embed.",
   },
   {
-    q: "What kinds of games are here?",
-    a: "Shooters like Call of Duty and Gun Mayhem, Minecraft unblocked, Slope, FNAF, Flappy Bird, and the rest of the library.",
+    q: "Will this work on a school Chromebook?",
+    a: `It can, but your district decides. Polygons keeps games on one site (not a chain of blocked links). Many schools still block game sites or *.vercel.app — a custom domain you control helps more than any trick. Share /library?q=mario to search and play in the side panel.`,
+  },
+  {
+    q: "Is there a search engine proxy?",
+    a: `No — and you shouldn’t need one. Use the library search (or ?q= in the URL). Games load through Polygons’ own routes so you’re not opening random outside tabs.`,
   },
 ];
 

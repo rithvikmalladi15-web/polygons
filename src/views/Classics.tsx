@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { classicCount, filterClassics, type ClassicShelf } from "../classics";
+import { classicCount, filterClassics, randomClassicSlug, type ClassicShelf } from "../classics";
 import { Footer } from "../components/Footer";
 import { GamePickCard } from "../components/GamePickCard";
-import { Link, go, openRandomClassic } from "../route";
+import { GameDockPlayer, libraryPlayParam, setLibraryPlay } from "../components/GameDockPlayer";
+import { Link, go, useLocationKey } from "../route";
 
 type ShelfFilter = ClassicShelf | "all";
 
@@ -17,7 +18,9 @@ const SHELVES: { id: ShelfFilter; label: string }[] = [
 ];
 
 export function Classics({ embedded = false }: { embedded?: boolean }) {
-  const [q, setQ] = useState("");
+  const navKey = useLocationKey();
+  const [q, setQ] = useState(() => new URLSearchParams(location.search).get("q") ?? "");
+  const dockSlug = embedded ? libraryPlayParam() : null;
   const [shelf, setShelf] = useState<ShelfFilter>("all");
   const [limit, setLimit] = useState(PAGE);
   const [headCompact, setHeadCompact] = useState(false);
@@ -32,6 +35,28 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
     scrollRef.current?.scrollTo({ top: 0 });
     if (!embedded) window.scrollTo({ top: 0 });
   }, [q, shelf, embedded]);
+
+  useEffect(() => {
+    const fromUrl = new URLSearchParams(location.search).get("q") ?? "";
+    setQ(fromUrl);
+  }, [navKey]);
+
+  useEffect(() => {
+    if (!embedded) return;
+    const timer = window.setTimeout(() => {
+      const params = new URLSearchParams(location.search);
+      const trimmed = q.trim();
+      if (trimmed) params.set("q", trimmed);
+      else params.delete("q");
+      const next = params.toString();
+      const want = next ? `/library?${next}` : "/library";
+      if (location.pathname + location.search !== want) {
+        history.replaceState({}, "", want);
+        window.dispatchEvent(new Event("polygons-nav"));
+      }
+    }, 280);
+    return () => window.clearTimeout(timer);
+  }, [q, embedded]);
 
   useEffect(() => {
     const root = scrollRef.current;
@@ -66,7 +91,7 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
         <h1 className={embedded ? "" : "display"}>{embedded ? "Games" : `${total} games on Polygons.`}</h1>
         {!embedded && (
           <p className="lede paper-lede">
-            {total.toLocaleString()} games, including classics and UNBLOCK picks. Your tab stays on Polygons.
+            {total.toLocaleString()} games in one tab — search the library, play in the side panel, all through Polygons.
           </p>
         )}
       </div>
@@ -86,7 +111,15 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
             <button type="button" className="btn btn-line" onClick={() => go("/#recommended")}>
               Recommended
             </button>
-            <button type="button" className="btn btn-green" onClick={openRandomClassic}>
+            <button
+              type="button"
+              className="btn btn-green"
+              onClick={() => {
+                const slug = randomClassicSlug();
+                if (embedded) setLibraryPlay(slug);
+                else go(`/hit/${slug}`);
+              }}
+            >
               Surprise me
             </button>
           </>
@@ -117,7 +150,12 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
       </p>
       <div className="classics-grid">
         {visible.map((game, index) => (
-          <GamePickCard key={game.slug} game={game} priorityThumb={index < 8} />
+          <GamePickCard
+            key={game.slug}
+            game={game}
+            priorityThumb={index < 8}
+            playTarget={embedded ? "dock" : "page"}
+          />
         ))}
       </div>
       {limit < hits.length && (
@@ -135,8 +173,8 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
       )}
       {!embedded && (
         <p className="classics-foot">
-          Games load from licensed embed hosts.{" "}
-          <Link href="/library">Open the library</Link>.
+          Every game runs in Polygons’ in-site player.{" "}
+          <Link href="/library">Open the library</Link> to search and play in the side panel.
         </p>
       )}
     </>
@@ -144,10 +182,20 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
 
   if (embedded) {
     return (
-      <div className={`lib${headCompact ? " lib-compact" : ""}`}>
+      <div className={`lib${dockSlug ? " lib-split-open" : ""}${headCompact ? " lib-compact" : ""}`}>
         {head}
-        <div className="lib-scroll" ref={scrollRef}>
-          <div className="wrap lib-scroll-inner">{grid}</div>
+        <div className="lib-split-body">
+          <div className="lib-scroll" ref={scrollRef}>
+            <div className="wrap lib-scroll-inner">{grid}</div>
+          </div>
+          {dockSlug ? (
+            <GameDockPlayer slug={dockSlug} onClose={() => setLibraryPlay(null)} />
+          ) : (
+            <aside className="lib-dock lib-dock-empty" aria-label="Game player">
+              <p className="kicker tiny">Side player</p>
+              <p className="hint">Choose a game — it plays here while you browse. Everything stays on Polygons.</p>
+            </aside>
+          )}
         </div>
       </div>
     );
