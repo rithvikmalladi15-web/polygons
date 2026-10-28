@@ -21,11 +21,14 @@ const vercelRewrites = routes.flatMap((r) => {
       { source: `${mount}/:path*`, destination: `${destBase}/:path*` },
     ];
   }
-  return [{ source: `${mount}/:path*`, destination: `${destBase}/:path*` }];
+  return [
+    { source: `${mount}`, destination: `${destBase}/` },
+    { source: `${mount}/:path*`, destination: `${destBase}/:path*` },
+  ];
 });
 
 vercelRewrites.push({
-  source: "/((?!api/|_gd/|_abc/|_ext/|assets/|games/|favicon\\.svg).*)",
+  source: "/((?!api/|_gd/|_abc/|_ext/|assets/|games/|covers/|favicon\\.svg).*)",
   destination: "/index.html",
 });
 

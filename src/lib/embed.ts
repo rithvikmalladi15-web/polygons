@@ -6,10 +6,14 @@ const GD_HOME = "https://gamedistribution.com/";
 
 function abcExternalUrl(abcPath: string): string {
   const path = abcPath.replace(/^\//, "");
+  if (path.endsWith(".html") && !path.includes("/")) {
+    return `https://abc.cloudfree.jp/${path}`;
+  }
   if (path.endsWith(".html")) {
     return `https://abc.cloudfree.jp/${path}`;
   }
-  return `https://abc.cloudfree.jp/${path.replace(/\/$/, "")}/`;
+  const folder = path.replace(/\/index\.html$/i, "").replace(/\/$/, "");
+  return `https://abc.cloudfree.jp/${folder}/index.html`;
 }
 
 function pushUnique(out: string[], url: string) {

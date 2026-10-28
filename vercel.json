@@ -12,36 +12,72 @@
   ],
   "rewrites": [
     {
+      "source": "/_ext/nitrome/badicecream2",
+      "destination": "https://cdn.nitrome.com/html5-games/badicecream2/"
+    },
+    {
       "source": "/_ext/nitrome/badicecream2/:path*",
       "destination": "https://cdn.nitrome.com/html5-games/badicecream2/:path*"
+    },
+    {
+      "source": "/_ext/nitrome/badicecream",
+      "destination": "https://cdn.nitrome.com/html5-games/badicecream/"
     },
     {
       "source": "/_ext/nitrome/badicecream/:path*",
       "destination": "https://cdn.nitrome.com/html5-games/badicecream/:path*"
     },
     {
+      "source": "/_ext/scratch-gd/embed",
+      "destination": "https://scratch.mit.edu/projects/105500895/"
+    },
+    {
       "source": "/_ext/scratch-gd/embed/:path*",
       "destination": "https://scratch.mit.edu/projects/105500895/:path*"
+    },
+    {
+      "source": "/_ext/brawl-stars",
+      "destination": "https://driftboss-free.github.io/g/brawl-stars/"
     },
     {
       "source": "/_ext/brawl-stars/:path*",
       "destination": "https://driftboss-free.github.io/g/brawl-stars/:path*"
     },
     {
+      "source": "/_ext/gecko11",
+      "destination": "https://playgeckogames.github.io/games/game11/"
+    },
+    {
       "source": "/_ext/gecko11/:path*",
       "destination": "https://playgeckogames.github.io/games/game11/:path*"
+    },
+    {
+      "source": "/_ext/slope",
+      "destination": "https://staticquasar931.github.io/slope/"
     },
     {
       "source": "/_ext/slope/:path*",
       "destination": "https://staticquasar931.github.io/slope/:path*"
     },
     {
+      "source": "/_ext/tube-jumpers",
+      "destination": "https://htmlxm.github.io/h3/tube-jumpers/"
+    },
+    {
       "source": "/_ext/tube-jumpers/:path*",
       "destination": "https://htmlxm.github.io/h3/tube-jumpers/:path*"
     },
     {
+      "source": "/_ext/crazy-cattle",
+      "destination": "https://crazy-cattle.github.io/iframe/"
+    },
+    {
       "source": "/_ext/crazy-cattle/:path*",
       "destination": "https://crazy-cattle.github.io/iframe/:path*"
+    },
+    {
+      "source": "/_gd/html5",
+      "destination": "https://html5.gamedistribution.com/"
     },
     {
       "source": "/_gd/html5/:path*",
@@ -56,47 +92,87 @@
       "destination": "https://embed.gamedistribution.com/:path*"
     },
     {
+      "source": "/_ext/pokemon-emerald",
+      "destination": "https://pokemon-emerald.github.io/"
+    },
+    {
       "source": "/_ext/pokemon-emerald/:path*",
       "destination": "https://pokemon-emerald.github.io/:path*"
+    },
+    {
+      "source": "/_gd/img",
+      "destination": "https://img.gamedistribution.com/"
     },
     {
       "source": "/_gd/img/:path*",
       "destination": "https://img.gamedistribution.com/:path*"
     },
     {
+      "source": "/_ext/fnaf",
+      "destination": "https://irv77.github.io/hd_fnaf/"
+    },
+    {
       "source": "/_ext/fnaf/:path*",
       "destination": "https://irv77.github.io/hd_fnaf/:path*"
+    },
+    {
+      "source": "/_ext/1v1lol",
+      "destination": "https://1v1lol-free.github.io/"
     },
     {
       "source": "/_ext/1v1lol/:path*",
       "destination": "https://1v1lol-free.github.io/:path*"
     },
     {
+      "source": "/_gd/www",
+      "destination": "https://gamedistribution.com/"
+    },
+    {
       "source": "/_gd/www/:path*",
       "destination": "https://gamedistribution.com/:path*"
+    },
+    {
+      "source": "/_ext/geometrydash-lite",
+      "destination": "https://geometrydash-lite.io/"
     },
     {
       "source": "/_ext/geometrydash-lite/:path*",
       "destination": "https://geometrydash-lite.io/:path*"
     },
     {
+      "source": "/_ext/mario64",
+      "destination": "https://mario64.vercel.app/"
+    },
+    {
       "source": "/_ext/mario64/:path*",
       "destination": "https://mario64.vercel.app/:path*"
+    },
+    {
+      "source": "/_abc",
+      "destination": "https://abc.cloudfree.jp/"
     },
     {
       "source": "/_abc/:path*",
       "destination": "https://abc.cloudfree.jp/:path*"
     },
     {
+      "source": "/_ext/miniplay",
+      "destination": "https://www.miniplay.com/"
+    },
+    {
       "source": "/_ext/miniplay/:path*",
       "destination": "https://www.miniplay.com/:path*"
+    },
+    {
+      "source": "/_ext/scratch-mit",
+      "destination": "https://scratch.mit.edu/"
     },
     {
       "source": "/_ext/scratch-mit/:path*",
       "destination": "https://scratch.mit.edu/:path*"
     },
     {
-      "source": "/((?!api/|_gd/|_abc/|_ext/|assets/|games/|favicon\\.svg).*)",
+      "source": "/((?!api/|_gd/|_abc/|_ext/|assets/|games/|covers/|favicon\\.svg).*)",
       "destination": "/index.html"
     }
   ]
