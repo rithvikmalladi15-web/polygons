@@ -6,10 +6,10 @@ import { SPOTLIGHT } from "./spotlight";
 import { UNBLOCK_ABC } from "./unblock-abc";
 import { TEEN_TOP_PICKS } from "./teen-top-picks";
 import { TEEN_TOP_100 } from "./curated-bundle";
-import { classicEmbedCandidates, classicEmbedSrc as resolveEmbedSrc } from "../lib/embed";
+import { classicEmbedSrc as resolveEmbedSrc } from "../lib/embed";
 import type { ClassicGame, ClassicShelf } from "./types";
 
-export { classicEmbedCandidates };
+export { classicEmbedCandidates, classicExternalPlayUrl, classicSameOriginPlayerUrl } from "../lib/embed";
 
 export type { ClassicGame, ClassicShelf } from "./types";
 

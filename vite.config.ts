@@ -90,6 +90,16 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/_ext\/scratch-gd/, "") || "/",
       },
+      "/_ext/mario64": {
+        target: "https://mario64.vercel.app",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/_ext\/mario64/, "") || "/",
+      },
+      "/_ext/miniplay": {
+        target: "https://www.miniplay.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/_ext\/miniplay/, "") || "/",
+      },
     },
   },
 });

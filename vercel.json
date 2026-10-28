@@ -25,6 +25,8 @@
     { "source": "/_ext/brawl-stars/:path*", "destination": "https://driftboss-free.github.io/g/brawl-stars/:path*" },
     { "source": "/_ext/pokemon-emerald/:path*", "destination": "https://pokemon-emerald.github.io/:path*" },
     { "source": "/_ext/scratch-gd/:path*", "destination": "https://scratch.mit.edu/projects/105500895/:path*" },
+    { "source": "/_ext/mario64/:path*", "destination": "https://mario64.vercel.app/:path*" },
+    { "source": "/_ext/miniplay/:path*", "destination": "https://www.miniplay.com/:path*" },
     { "source": "/((?!api/|_gd/|_abc/|_ext/|assets/|games/|favicon\\.svg).*)", "destination": "/index.html" }
   ]
 }

@@ -11,7 +11,7 @@ const HERO_GAME = SPOTLIGHT[0];
 const QUESTIONS = [
   {
     q: "Do games send me to another website?",
-    a: `No. Every title loads in an embedded player on ${SITE_NAME}. The address bar stays on this site.`,
+    a: `No. Every title loads in Polygons’ in-site player (same URL bar). Games are served through our /_abc, /_gd, and /_ext routes — not a redirect to another site.`,
   },
   {
     q: "Where do these games come from?",

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { classicBySlug, classicEmbedCandidates, recommendGames, type ClassicGame } from "../classics";
+import { classicBySlug, classicEmbedCandidates, classicExternalPlayUrl, classicSameOriginPlayerUrl, recommendGames, type ClassicGame } from "../classics";
 import { GamePickCard } from "../components/GamePickCard";
 import { exitDocumentFullscreen, isElementFullscreen, requestElementFullscreen } from "../lib/fullscreen";
 import { recordGamePlay } from "../lib/play-stats";
@@ -10,6 +10,8 @@ export function ClassicPlay({ slug }: { slug: string }) {
   const candidates = useMemo(() => (game ? classicEmbedCandidates(game) : []), [game]);
   const [sourceIndex, setSourceIndex] = useState(0);
   const src = candidates[sourceIndex] ?? "";
+  const fallbackExternal = game ? classicExternalPlayUrl(game) : "";
+  const sameOriginPlayer = game ? classicSameOriginPlayerUrl(game) : "";
   const viewportRef = useRef<HTMLDivElement>(null);
   const recommendRef = useRef<HTMLElement>(null);
   const [fullscreen, setFullscreen] = useState(false);
@@ -95,7 +97,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
           <button type="button" className="text-btn" onClick={classicBack}>
             Back
           </button>
-          <p className="kicker tiny">Embedded on Polygons</p>
+          <p className="kicker tiny">Plays on Polygons — in-site player</p>
           <h1>{game.name}</h1>
         </div>
         <div className="play-chrome">
@@ -110,9 +112,16 @@ export function ClassicPlay({ slug }: { slug: string }) {
               Switch source
             </button>
           )}
-          <a className="btn btn-green" href={src} target="_blank" rel="noopener noreferrer">
-            Open in new tab
-          </a>
+          {sameOriginPlayer && (
+            <a className="btn btn-line" href={sameOriginPlayer} target="_blank" rel="noopener noreferrer">
+              Player in new tab
+            </a>
+          )}
+          {fallbackExternal && (
+            <a className="btn btn-ghost" href={fallbackExternal} target="_blank" rel="noopener noreferrer">
+              Original host
+            </a>
+          )}
           <Link href="/library" className="btn btn-ghost">
             More games
           </Link>
@@ -129,8 +138,8 @@ export function ClassicPlay({ slug }: { slug: string }) {
             <button type="button" className="btn btn-green" onClick={restartSources}>
               Try again
             </button>
-            <a className="btn btn-line" href={src} target="_blank" rel="noopener noreferrer">
-              Open in new tab
+            <a className="btn btn-line" href={sameOriginPlayer || fallbackExternal} target="_blank" rel="noopener noreferrer">
+              Open player
             </a>
           </div>
         ) : (
@@ -151,15 +160,15 @@ export function ClassicPlay({ slug }: { slug: string }) {
           <button type="button" className="btn btn-line" onClick={tryNextSource}>
             Try another source
           </button>
-          <a className="btn btn-green" href={src} target="_blank" rel="noopener noreferrer">
-            Open in new tab
+          <a className="btn btn-line" href={sameOriginPlayer || fallbackExternal} target="_blank" rel="noopener noreferrer">
+            Open player
           </a>
         </div>
       )}
       <p className="goal">{game.line}</p>
       <p className="hint in-tab">
-        Source {sourceIndex + 1} of {candidates.length}. Use <strong>Open in new tab</strong> if the frame stays
-        white.
+        Games load through Polygons (<code>/_abc</code>, <code>/_gd</code>, <code>/_ext</code>) so you stay on this site.
+        Source {sourceIndex + 1} of {candidates.length}. Use <strong>Switch source</strong> if the frame stays blank.
       </p>
 
       <section className="recommend-block" id="game-recommend" ref={recommendRef}>
@@ -221,6 +230,7 @@ function EmbedFrame({
         allowFullScreen
         referrerPolicy="no-referrer-when-downgrade"
         loading="eager"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-downloads"
         onLoad={() => setLoading(false)}
       />
       {stuck && !loading && (
