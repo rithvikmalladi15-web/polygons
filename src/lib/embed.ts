@@ -46,7 +46,9 @@ export function classicEmbedCandidates(game: ClassicGame): string[] {
     }
   }
 
-  return out;
+  const normalized = out.map((url) => (url.startsWith("http") ? proxyPath(url) : url));
+  const sameOrigin = normalized.filter((url) => url.startsWith("/"));
+  return sameOrigin.length ? sameOrigin : normalized;
 }
 
 export function classicEmbedSrc(game: ClassicGame): string {

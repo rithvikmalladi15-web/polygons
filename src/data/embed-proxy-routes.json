@@ -1,0 +1,122 @@
+[
+  {
+    "id": "abc",
+    "from": "https://abc.cloudfree.jp/",
+    "to": "/_abc/",
+    "target": "https://abc.cloudfree.jp"
+  },
+  {
+    "id": "gd-html5",
+    "from": "https://html5.gamedistribution.com/",
+    "to": "/_gd/html5/",
+    "target": "https://html5.gamedistribution.com"
+  },
+  {
+    "id": "gd-embed",
+    "from": "https://embed.gamedistribution.com/",
+    "to": "/_gd/embed/",
+    "target": "https://embed.gamedistribution.com"
+  },
+  {
+    "id": "gd-img",
+    "from": "https://img.gamedistribution.com/",
+    "to": "/_gd/img/",
+    "target": "https://img.gamedistribution.com"
+  },
+  {
+    "id": "gd-www",
+    "from": "https://gamedistribution.com/",
+    "to": "/_gd/www/",
+    "target": "https://gamedistribution.com"
+  },
+  {
+    "id": "nitrome-badicecream",
+    "from": "https://cdn.nitrome.com/html5-games/badicecream/",
+    "to": "/_ext/nitrome/badicecream/",
+    "target": "https://cdn.nitrome.com/html5-games/badicecream"
+  },
+  {
+    "id": "nitrome-badicecream2",
+    "from": "https://cdn.nitrome.com/html5-games/badicecream2/",
+    "to": "/_ext/nitrome/badicecream2/",
+    "target": "https://cdn.nitrome.com/html5-games/badicecream2"
+  },
+  {
+    "id": "gecko11",
+    "from": "https://playgeckogames.github.io/games/game11/",
+    "to": "/_ext/gecko11/",
+    "target": "https://playgeckogames.github.io/games/game11"
+  },
+  {
+    "id": "slope",
+    "from": "https://staticquasar931.github.io/slope/",
+    "to": "/_ext/slope/",
+    "target": "https://staticquasar931.github.io/slope"
+  },
+  {
+    "id": "crazy-cattle",
+    "from": "https://crazy-cattle.github.io/iframe/",
+    "to": "/_ext/crazy-cattle/",
+    "target": "https://crazy-cattle.github.io/iframe"
+  },
+  {
+    "id": "1v1lol",
+    "from": "https://1v1lol-free.github.io/",
+    "to": "/_ext/1v1lol/",
+    "target": "https://1v1lol-free.github.io"
+  },
+  {
+    "id": "tube-jumpers",
+    "from": "https://htmlxm.github.io/h3/tube-jumpers",
+    "to": "/_ext/tube-jumpers",
+    "target": "https://htmlxm.github.io/h3/tube-jumpers"
+  },
+  {
+    "id": "geometrydash-lite",
+    "from": "https://geometrydash-lite.io/",
+    "to": "/_ext/geometrydash-lite/",
+    "target": "https://geometrydash-lite.io"
+  },
+  {
+    "id": "brawl-stars",
+    "from": "https://driftboss-free.github.io/g/brawl-stars/",
+    "to": "/_ext/brawl-stars/",
+    "target": "https://driftboss-free.github.io/g/brawl-stars"
+  },
+  {
+    "id": "pokemon-emerald",
+    "from": "https://pokemon-emerald.github.io/",
+    "to": "/_ext/pokemon-emerald/",
+    "target": "https://pokemon-emerald.github.io"
+  },
+  {
+    "id": "scratch-gd",
+    "from": "https://scratch.mit.edu/projects/105500895/embed",
+    "to": "/_ext/scratch-gd/embed",
+    "target": "https://scratch.mit.edu/projects/105500895"
+  },
+  {
+    "id": "scratch-mit",
+    "from": "https://scratch.mit.edu/",
+    "to": "/_ext/scratch-mit/",
+    "target": "https://scratch.mit.edu"
+  },
+  {
+    "id": "mario64",
+    "from": "https://mario64.vercel.app/",
+    "to": "/_ext/mario64/",
+    "target": "https://mario64.vercel.app"
+  },
+  {
+    "id": "miniplay",
+    "from": "https://www.miniplay.com/",
+    "to": "/_ext/miniplay/",
+    "target": "https://www.miniplay.com"
+  },
+  {
+    "id": "fnaf",
+    "from": "https://irv77.github.io/hd_fnaf/",
+    "to": "/_ext/fnaf/",
+    "target": "https://irv77.github.io/hd_fnaf"
+  }
+]
