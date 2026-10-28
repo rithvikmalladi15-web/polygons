@@ -61,7 +61,7 @@ export function GameDockPlayer({ slug, onClose }: Props) {
           allow="autoplay; fullscreen; gamepad; microphone; camera"
           allowFullScreen
           referrerPolicy="no-referrer-when-downgrade"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-downloads"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-pointer-lock allow-downloads"
           onError={() => {
             if (sourceIndex < candidates.length - 1) setSourceIndex((i) => i + 1);
           }}

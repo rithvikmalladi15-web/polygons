@@ -168,8 +168,9 @@ export function ClassicPlay({ slug }: { slug: string }) {
       )}
       <p className="goal">{game.line}</p>
       <p className="hint in-tab">
-        Games load through Polygons (<code>/_abc</code>, <code>/_gd</code>, <code>/_ext</code>) so you stay on this site.
-        Source {sourceIndex + 1} of {candidates.length}. Use <strong>Switch source</strong> if the frame stays blank.
+        Click inside the player to start. Games load on Polygons (<code>/_abc</code>, <code>/_gd</code>,{" "}
+        <code>/_ext</code>). Source {sourceIndex + 1} of {candidates.length}. Use{" "}
+        <strong>Switch source</strong> if the frame stays blank.
       </p>
 
       <section className="recommend-block" id="game-recommend" ref={recommendRef}>
@@ -209,21 +210,23 @@ function EmbedFrame({
   useEffect(() => {
     setLoading(true);
     const hint = window.setTimeout(() => onStuck(), 8_000);
-    return () => window.clearTimeout(hint);
+    const reveal = window.setTimeout(() => setLoading(false), 4_000);
+    return () => {
+      window.clearTimeout(hint);
+      window.clearTimeout(reveal);
+    };
   }, [src, onStuck]);
 
   return (
     <div className={`embed-shell${fillViewport ? " embed-shell-fill" : ""}`}>
-      {loading && (
-        <div className="embed-loading" aria-live="polite">
-          <p>Loading {game.name}…</p>
-          {sourceCount > 1 && (
-            <p className="hint">
-              Source {sourceIndex + 1} of {sourceCount}
-            </p>
-          )}
-        </div>
-      )}
+      <div className={`embed-loading${loading ? "" : " embed-loading-hidden"}`} aria-live="polite" aria-hidden={!loading}>
+        <p>Loading {game.name}…</p>
+        {sourceCount > 1 && (
+          <p className="hint">
+            Source {sourceIndex + 1} of {sourceCount}
+          </p>
+        )}
+      </div>
       <iframe
         key={src}
         className="embed-frame"
@@ -233,7 +236,7 @@ function EmbedFrame({
         allowFullScreen
         referrerPolicy="no-referrer-when-downgrade"
         loading="eager"
-        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-downloads"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-pointer-lock allow-downloads"
         onLoad={() => setLoading(false)}
         onError={() => {
           setLoading(false);
