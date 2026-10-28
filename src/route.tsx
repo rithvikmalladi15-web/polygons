@@ -47,12 +47,16 @@ export function replace(to: string) {
   notify();
 }
 
-export function openClassic(slug: string) {
+export function rememberClassicReturn() {
   try {
     sessionStorage.setItem("polygons-from", location.pathname + location.search);
   } catch {
     /* ignore */
   }
+}
+
+export function openClassic(slug: string) {
+  rememberClassicReturn();
   go(`/hit/${slug}`);
 }
 

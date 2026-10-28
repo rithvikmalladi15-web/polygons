@@ -50,6 +50,7 @@ function gd(
   gdId: string,
   width = 900,
   height = 600,
+  gdPublishSlug?: string,
 ): ClassicGame {
   return {
     slug,
@@ -60,6 +61,7 @@ function gd(
     height,
     shelf: "famous",
     gdId,
+    gdPublishSlug: gdPublishSlug ?? slug,
   };
 }
 

@@ -10,6 +10,7 @@ export const SPOTLIGHT: ClassicGame[] = [
     height: 590,
     shelf: "spotlight",
     gdId: "23f61a72a4a64a68943a81870bbc3cd1",
+    gdPublishSlug: "call-of-duty",
   },
   {
     slug: "gun-mayhem",
@@ -20,6 +21,7 @@ export const SPOTLIGHT: ClassicGame[] = [
     height: 640,
     shelf: "spotlight",
     gdId: "8c6ab9e8ce95462aab3a4bcc58f48a56",
+    gdPublishSlug: "gun-mayhem",
   },
   {
     slug: "special-forces",
@@ -30,6 +32,7 @@ export const SPOTLIGHT: ClassicGame[] = [
     height: 600,
     shelf: "spotlight",
     gdId: "ac15e4568604402ea4f20772fa7608d0",
+    gdPublishSlug: "special-forces",
   },
   {
     slug: "special-forces-sniper",
@@ -40,6 +43,7 @@ export const SPOTLIGHT: ClassicGame[] = [
     height: 600,
     shelf: "spotlight",
     gdId: "adc6620d61594e11a0177fab6f173f5e",
+    gdPublishSlug: "special-forces-sniper",
   },
   {
     slug: "minecraft-unblocked",
@@ -60,6 +64,7 @@ export const SPOTLIGHT: ClassicGame[] = [
     height: 600,
     shelf: "spotlight",
     gdId: "94673205996e4f308045e87794ff6867",
+    gdPublishSlug: "minecraft-pixel-warfare",
     thumbUrl: "https://img.gamedistribution.com/94673205996e4f308045e87794ff6867-512x384.jpg",
   },
   {
@@ -71,6 +76,7 @@ export const SPOTLIGHT: ClassicGame[] = [
     height: 720,
     shelf: "spotlight",
     gdId: "334714f0c010454faf2248793ba893be",
+    gdPublishSlug: "stick-war-saga",
     thumbUrl: "https://img.gamedistribution.com/334714f0c010454faf2248793ba893be-512x384.jpg",
   },
   {
@@ -92,6 +98,7 @@ export const SPOTLIGHT: ClassicGame[] = [
     height: 720,
     shelf: "spotlight",
     gdId: "0a8b51e5eaee42e7b4db83ca00afc92e",
+    gdPublishSlug: "drift-boss",
   },
   {
     slug: "crazy-cattle-3",
@@ -122,5 +129,6 @@ export const SPOTLIGHT: ClassicGame[] = [
     height: 800,
     shelf: "spotlight",
     gdId: "34c651d768404d11a564d2aa0cc96bca",
+    gdPublishSlug: "slope-extra",
   },
 ];

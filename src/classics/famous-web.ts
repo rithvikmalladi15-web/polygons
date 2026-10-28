@@ -9,6 +9,7 @@ function gd(
   gdId: string,
   width = 900,
   height = 600,
+  gdPublishSlug?: string,
 ): ClassicGame {
   return {
     slug,
@@ -19,6 +20,7 @@ function gd(
     height,
     shelf: "famous",
     gdId,
+    gdPublishSlug: gdPublishSlug ?? slug,
   };
 }
 
@@ -215,6 +217,9 @@ export const FAMOUS_WEB: ClassicGame[] = [
     "Maze dodgeball in the spirit of The World's Hardest Game.",
     ["worlds", "hardest", "maze", "coolmath"],
     "1e2400b542644c108c3b394739250ff0",
+    800,
+    600,
+    "hardest-game-on-earth",
   ),
   gd(
     "brainrot-hole-io",

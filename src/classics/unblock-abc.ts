@@ -326,15 +326,18 @@ export const UNBLOCK_ABC: ClassicGame[] = [
   {
     "slug": "unblock-madalin-stunt-cars-2",
     "name": "Madalin Stunt Cars 2",
-    "line": "From the UNBLOCK catalog at abc.cloudfree.jp, embedded on Polygons.",
+    "line": "Stunt racing and highway drifts — plays in-browser on Polygons.",
     "tags": [
       "unblock",
-      "abc",
-      "madalin-stunt-cars-2"
+      "madalin",
+      "stunt",
+      "cars",
+      "racing"
     ],
     "width": 1280,
     "height": 720,
-    "abcPath": "madalin-stunt-cars-2/index.html",
+    "gdId": "5bacf4c8308d43b59deafba835ffd222",
+    "gdPublishSlug": "real-car-pro-racing",
     "shelf": "unblock"
   },
   {

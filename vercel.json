@@ -1,0 +1,30 @@
+{
+  "headers": [
+    {
+      "source": "/games/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/_gd/html5/:path*", "destination": "https://html5.gamedistribution.com/:path*" },
+    { "source": "/_gd/embed", "destination": "https://embed.gamedistribution.com/" },
+    { "source": "/_gd/embed/:path*", "destination": "https://embed.gamedistribution.com/:path*" },
+    { "source": "/_gd/img/:path*", "destination": "https://img.gamedistribution.com/:path*" },
+    { "source": "/_abc/:path*", "destination": "https://abc.cloudfree.jp/:path*" },
+    { "source": "/_ext/slope/:path*", "destination": "https://staticquasar931.github.io/slope/:path*" },
+    { "source": "/_ext/crazy-cattle/:path*", "destination": "https://crazy-cattle.github.io/iframe/:path*" },
+    { "source": "/_ext/1v1lol/:path*", "destination": "https://1v1lol-free.github.io/:path*" },
+    { "source": "/_ext/fnaf/:path*", "destination": "https://irv77.github.io/hd_fnaf/:path*" },
+    { "source": "/_ext/gecko11/:path*", "destination": "https://playgeckogames.github.io/games/game11/:path*" },
+    { "source": "/_ext/tube-jumpers/:path*", "destination": "https://htmlxm.github.io/h3/tube-jumpers/:path*" },
+    { "source": "/_ext/nitrome/badicecream/:path*", "destination": "https://cdn.nitrome.com/html5-games/badicecream/:path*" },
+    { "source": "/_ext/nitrome/badicecream2/:path*", "destination": "https://cdn.nitrome.com/html5-games/badicecream2/:path*" },
+    { "source": "/_ext/geometrydash-lite/:path*", "destination": "https://geometrydash-lite.io/:path*" },
+    { "source": "/_ext/brawl-stars/:path*", "destination": "https://driftboss-free.github.io/g/brawl-stars/:path*" },
+    { "source": "/_ext/pokemon-emerald/:path*", "destination": "https://pokemon-emerald.github.io/:path*" },
+    { "source": "/_ext/scratch-gd/:path*", "destination": "https://scratch.mit.edu/projects/105500895/:path*" },
+    { "source": "/((?!api/|_gd/|_abc/|_ext/|assets/|games/|favicon\\.svg).*)", "destination": "/index.html" }
+  ]
+}

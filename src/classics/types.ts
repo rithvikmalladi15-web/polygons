@@ -9,6 +9,8 @@ export type ClassicGame = {
   height: number;
   shelf: ClassicShelf;
   gdId?: string;
+  /** GameDistribution.com `/games/<slug>/` page used as gd_sdk_referrer_url when set. */
+  gdPublishSlug?: string;
   directUrl?: string;
   abcPath?: string;
   thumbUrl?: string;

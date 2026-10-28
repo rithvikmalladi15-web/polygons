@@ -6,13 +6,21 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "catalog:build": "node scripts/build-gd-catalog.mjs"
+    "catalog:build": "node scripts/build-gd-catalog.mjs",
+    "games:mirror": "node scripts/mirror-bundle.mjs --skip-existing",
+    "games:mirror:sample": "node scripts/mirror-abc.mjs --limit 5",
+    "bundle:build": "node scripts/build-curated-bundle.mjs",
+    "covers:build": "node scripts/build-covers-bundle.mjs",
+    "covers:fetch": "node scripts/fetch-covers.mjs",
+    "build:vercel-hosted": "node scripts/mirror-abc.mjs --catalog --skip-existing && npm run build"
   },
   "dependencies": {
+    "@vercel/kv": "^3.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@vercel/node": "^5.3.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.1.0",

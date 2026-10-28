@@ -11,7 +11,7 @@ export function Footer() {
             <LogoMark />
             <LogoWordmark />
           </div>
-          <p>1,000+ games embedded and played on {SITE_NAME}.</p>
+          <p>100 saved games embedded and played on {SITE_NAME}.</p>
         </div>
         <div className="footer-links">
           <Link href="/library">Library</Link>

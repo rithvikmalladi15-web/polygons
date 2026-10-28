@@ -1,17 +1,33 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { classicBySlug, classicEmbedSrc, recommendGames, type ClassicGame } from "../classics";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { classicBySlug, classicEmbedCandidates, recommendGames, type ClassicGame } from "../classics";
 import { GamePickCard } from "../components/GamePickCard";
 import { exitDocumentFullscreen, isElementFullscreen, requestElementFullscreen } from "../lib/fullscreen";
+import { recordGamePlay } from "../lib/play-stats";
 import { classicBack, Link } from "../route";
 
 export function ClassicPlay({ slug }: { slug: string }) {
   const game = classicBySlug(slug);
-  const src = useMemo(() => (game ? classicEmbedSrc(game) : ""), [game, slug]);
+  const candidates = useMemo(() => (game ? classicEmbedCandidates(game) : []), [game]);
+  const [sourceIndex, setSourceIndex] = useState(0);
+  const src = candidates[sourceIndex] ?? "";
   const viewportRef = useRef<HTMLDivElement>(null);
   const recommendRef = useRef<HTMLElement>(null);
   const [fullscreen, setFullscreen] = useState(false);
+  const [embedFailed, setEmbedFailed] = useState(false);
+  const [stuck, setStuck] = useState(false);
 
   const related = useMemo(() => (game ? recommendGames(game, 10) : []), [game]);
+
+  useEffect(() => {
+    setSourceIndex(0);
+    setEmbedFailed(false);
+    setStuck(false);
+  }, [game?.slug]);
+
+  useEffect(() => {
+    if (!game?.slug) return;
+    recordGamePlay(game.slug);
+  }, [game?.slug]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -37,7 +53,27 @@ export function ClassicPlay({ slug }: { slug: string }) {
     else await requestElementFullscreen(viewport);
   };
 
-  if (!game || !src) {
+  const tryNextSource = useCallback(() => {
+    setStuck(false);
+    setSourceIndex((index) => {
+      if (index < candidates.length - 1) {
+        setEmbedFailed(false);
+        return index + 1;
+      }
+      setEmbedFailed(true);
+      return index;
+    });
+  }, [candidates.length]);
+
+  const restartSources = useCallback(() => {
+    setEmbedFailed(false);
+    setStuck(false);
+    setSourceIndex(0);
+  }, []);
+
+  const markStuck = useCallback(() => setStuck(true), []);
+
+  if (!game || candidates.length === 0) {
     return (
       <section className="wrap missing">
         <p className="kicker">Missing</p>
@@ -66,9 +102,17 @@ export function ClassicPlay({ slug }: { slug: string }) {
           <button type="button" className="btn btn-line" onClick={toggleFullscreen}>
             {fullscreen ? "Exit fullscreen" : "Fullscreen"}
           </button>
-          <button type="button" className="btn btn-green" onClick={scrollToRecommend}>
-            Recommend games
+          <button type="button" className="btn btn-line" onClick={scrollToRecommend}>
+            More like this
           </button>
+          {candidates.length > 1 && (
+            <button type="button" className="btn btn-line" onClick={tryNextSource}>
+              Switch source
+            </button>
+          )}
+          <a className="btn btn-green" href={src} target="_blank" rel="noopener noreferrer">
+            Open in new tab
+          </a>
           <Link href="/library" className="btn btn-ghost">
             More games
           </Link>
@@ -79,11 +123,43 @@ export function ClassicPlay({ slug }: { slug: string }) {
         className={`embed-viewport${fullscreen ? " embed-viewport-fs" : ""}`}
         style={embedVars}
       >
-        <EmbedFrame game={game} src={src} fillViewport={fullscreen} />
+        {embedFailed ? (
+          <div className="embed-fallback">
+            <p>We couldn’t load this game in the player.</p>
+            <button type="button" className="btn btn-green" onClick={restartSources}>
+              Try again
+            </button>
+            <a className="btn btn-line" href={src} target="_blank" rel="noopener noreferrer">
+              Open in new tab
+            </a>
+          </div>
+        ) : (
+          <EmbedFrame
+            game={game}
+            src={src}
+            sourceIndex={sourceIndex}
+            sourceCount={candidates.length}
+            fillViewport={fullscreen}
+            stuck={stuck}
+            onStuck={markStuck}
+          />
+        )}
       </div>
+      {stuck && !embedFailed && (
+        <div className="play-stuck-banner">
+          <p>Still blank? The host may be blocking the embed.</p>
+          <button type="button" className="btn btn-line" onClick={tryNextSource}>
+            Try another source
+          </button>
+          <a className="btn btn-green" href={src} target="_blank" rel="noopener noreferrer">
+            Open in new tab
+          </a>
+        </div>
+      )}
       <p className="goal">{game.line}</p>
       <p className="hint in-tab">
-        The game runs inside Polygons. Your address bar stays on this site.
+        Source {sourceIndex + 1} of {candidates.length}. Use <strong>Open in new tab</strong> if the frame stays
+        white.
       </p>
 
       <section className="recommend-block" id="game-recommend" ref={recommendRef}>
@@ -102,57 +178,56 @@ export function ClassicPlay({ slug }: { slug: string }) {
 function EmbedFrame({
   game,
   src,
+  sourceIndex,
+  sourceCount,
   fillViewport,
+  stuck,
+  onStuck,
 }: {
   game: ClassicGame;
   src: string;
+  sourceIndex: number;
+  sourceCount: number;
   fillViewport: boolean;
+  stuck: boolean;
+  onStuck: () => void;
 }) {
-  const shellRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-  useLayoutEffect(() => {
-    const shell = shellRef.current;
-    if (!shell) return;
-
-    const update = () => {
-      const cw = shell.clientWidth;
-      const ch = shell.clientHeight;
-      if (cw < 1 || ch < 1) return;
-      const next = Math.min(cw / game.width, ch / game.height);
-      setScale(next);
-    };
-
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(shell);
-    return () => observer.disconnect();
-  }, [game.width, game.height, fillViewport]);
-
-  const fittedW = game.width * scale;
-  const fittedH = game.height * scale;
+  useEffect(() => {
+    setLoading(true);
+    const hint = window.setTimeout(() => onStuck(), 8_000);
+    return () => window.clearTimeout(hint);
+  }, [src, onStuck]);
 
   return (
-    <div className={`embed-shell${fillViewport ? " embed-shell-fill" : ""}`} ref={shellRef}>
-      <div className="embed-scale-wrap" style={{ width: fittedW, height: fittedH }}>
-        <iframe
-          key={src}
-          className="embed-frame"
-          title={game.name}
-          src={src}
-          width={game.width}
-          height={game.height}
-          style={{
-            width: game.width,
-            height: game.height,
-            transform: `scale(${scale})`,
-          }}
-          allow="autoplay; fullscreen; gamepad"
-          allowFullScreen
-          referrerPolicy="strict-origin-when-cross-origin"
-          loading="eager"
-        />
-      </div>
+    <div className={`embed-shell${fillViewport ? " embed-shell-fill" : ""}`}>
+      {loading && (
+        <div className="embed-loading" aria-live="polite">
+          <p>Loading {game.name}…</p>
+          {sourceCount > 1 && (
+            <p className="hint">
+              Source {sourceIndex + 1} of {sourceCount}
+            </p>
+          )}
+        </div>
+      )}
+      <iframe
+        key={src}
+        className="embed-frame"
+        title={game.name}
+        src={src}
+        allow="autoplay; fullscreen; gamepad; microphone; camera"
+        allowFullScreen
+        referrerPolicy="no-referrer-when-downgrade"
+        loading="eager"
+        onLoad={() => setLoading(false)}
+      />
+      {stuck && !loading && (
+        <div className="embed-stuck-hint">
+          <p>Not loading?</p>
+        </div>
+      )}
     </div>
   );
 }

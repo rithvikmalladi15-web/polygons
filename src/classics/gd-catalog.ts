@@ -21,5 +21,6 @@ export const GD_CATALOG: ClassicGame[] = entries.map((entry) => ({
   height: entry.height,
   shelf: "catalog",
   gdId: entry.gdId,
+  gdPublishSlug: entry.slug.startsWith("gd-") ? entry.slug.slice(3) : undefined,
   thumbUrl: `https://img.gamedistribution.com/${entry.gdId}-512x384.jpg`,
 }));

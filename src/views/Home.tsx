@@ -15,7 +15,7 @@ const QUESTIONS = [
   },
   {
     q: "Where do these games come from?",
-    a: "1,000+ games: UNBLOCK picks, classics like Flappy Bird and FNAF, spotlight hits like Slope and 1v1.LOL, and the rest of the library.",
+    a: "100 hand-picked hits: Minecraft Classic, Slope, Geometry Dash, FNAF, UNBLOCK staples, and more — all hosted for in-site play.",
   },
   {
     q: "Do I install anything?",
@@ -55,11 +55,11 @@ export function Home() {
       <section className="hero ink">
         <div className="wrap hero-grid">
           <div>
-            <p className="kicker">1,000+ games</p>
+            <p className="kicker">100 games · cover art ready</p>
             <h1 className="display">Play here. Stay on {SITE_NAME}.</h1>
             <p className="lede">
-              Call of Duty, Minecraft unblocked, gun games, Slope, FNAF, and 1,000+ more. Every title opens
-              embedded in this tab.
+              Minecraft, Slope, Geometry Dash, FNAF, Subway Surfers, and 95 more favorites — each one part of our
+              saved in-house library, embedded in this tab.
             </p>
             <div className="hero-actions">
               <button type="button" className="btn btn-gold" onClick={openRandomClassic}>
@@ -74,12 +74,12 @@ export function Home() {
             </div>
             <dl className="stats">
               <div>
-                <dt>Total games</dt>
+                <dt>Saved library</dt>
                 <dd>{total.toLocaleString()}</dd>
               </div>
               <div>
-                <dt>Catalog</dt>
-                <dd>{classicCount("catalog").toLocaleString()}</dd>
+                <dt>UNBLOCK</dt>
+                <dd>{classicCount("unblock")}</dd>
               </div>
               <div>
                 <dt>Classics</dt>
@@ -121,8 +121,8 @@ export function Home() {
               <p>Each game runs inside {SITE_NAME}. You never bounce to another homepage when you press play.</p>
             </article>
             <article className="panel">
-              <h3>1,000+ games</h3>
-              <p>Search and filters cover the full library, from spotlight hits to the rest of the catalog.</p>
+              <h3>100 saved games</h3>
+              <p>Search and filters cover our full saved set — no random third-party catalog clutter.</p>
             </article>
             <article className="panel">
               <h3>Fits the frame</h3>
@@ -149,10 +149,10 @@ export function Home() {
           <p className="kicker">Start here</p>
           <h2 className="display">Spotlight picks.</h2>
           <div className="feature-grid">
-            {SPOTLIGHT.map((game) => (
+            {recommended.slice(0, 6).map((game) => (
               <Link key={game.slug} href={`/hit/${game.slug}`} className="card hit-card">
                 <GameThumb game={game} />
-                <span className="kicker tiny">Spotlight</span>
+                <span className="kicker tiny">Saved pick</span>
                 <h3>{game.name}</h3>
                 <p>{game.line}</p>
                 <span className="meta">Play on {SITE_NAME}</span>
@@ -166,7 +166,7 @@ export function Home() {
         <div className="wrap band-inner">
           <div>
             <h2 className="display">Pick one and start.</h2>
-            <p>Surprise me opens a random game from the full catalog.</p>
+            <p>Surprise me opens a random game from the saved library.</p>
           </div>
           <button type="button" className="btn btn-green" onClick={openRandomClassic}>
             Surprise me

@@ -6,11 +6,10 @@ import { Link, go, openRandomClassic } from "../route";
 
 type ShelfFilter = ClassicShelf | "all";
 
-const PAGE = 48;
+const PAGE = 24;
 
 const SHELVES: { id: ShelfFilter; label: string }[] = [
   { id: "all", label: "All" },
-  { id: "catalog", label: "Catalog" },
   { id: "spotlight", label: "Spotlight" },
   { id: "famous", label: "Classics" },
   { id: "unblock", label: "UNBLOCK" },
@@ -21,6 +20,7 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
   const [q, setQ] = useState("");
   const [shelf, setShelf] = useState<ShelfFilter>("all");
   const [limit, setLimit] = useState(PAGE);
+  const [headCompact, setHeadCompact] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const hits = useMemo(() => filterClassics(q, shelf), [q, shelf]);
   const total = classicCount("all");
@@ -28,6 +28,7 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
 
   useEffect(() => {
     setLimit(PAGE);
+    setHeadCompact(false);
     scrollRef.current?.scrollTo({ top: 0 });
     if (!embedded) window.scrollTo({ top: 0 });
   }, [q, shelf, embedded]);
@@ -36,6 +37,7 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
     const root = scrollRef.current;
     if (!root) return;
     const onScroll = () => {
+      setHeadCompact(root.scrollTop > 48);
       if (limit >= hits.length) return;
       if (root.scrollTop + root.clientHeight >= root.scrollHeight - 320) {
         setLimit((value) => Math.min(value + PAGE, hits.length));
@@ -61,7 +63,7 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
     <div className={embedded ? "wrap lib-head" : "wrap"}>
       <div className="lib-title">
         <p className="kicker">{embedded ? "Library" : "Play"}</p>
-        <h1 className={embedded ? "" : "display"}>{embedded ? "Games" : "1,000+ games in one tab."}</h1>
+        <h1 className={embedded ? "" : "display"}>{embedded ? "Games" : `${total} games on Polygons.`}</h1>
         {!embedded && (
           <p className="lede paper-lede">
             {total.toLocaleString()} games, including classics and UNBLOCK picks. Your tab stays on Polygons.
@@ -114,8 +116,8 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
         {hits.length === 1 ? "game" : "games"}
       </p>
       <div className="classics-grid">
-        {visible.map((game) => (
-          <GamePickCard key={game.slug} game={game} />
+        {visible.map((game, index) => (
+          <GamePickCard key={game.slug} game={game} priorityThumb={index < 8} />
         ))}
       </div>
       {limit < hits.length && (
@@ -142,7 +144,7 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
 
   if (embedded) {
     return (
-      <div className="lib">
+      <div className={`lib${headCompact ? " lib-compact" : ""}`}>
         {head}
         <div className="lib-scroll" ref={scrollRef}>
           <div className="wrap lib-scroll-inner">{grid}</div>

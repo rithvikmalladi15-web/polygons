@@ -11,6 +11,7 @@ export const COOLMATH_PICKS: ClassicGame[] = [
     height: 600,
     shelf: "coolmath",
     gdId: "1377b99c10284c229423118a941af3b1",
+    gdPublishSlug: "ovo",
   },
   {
     slug: "coolmath-run-3",
@@ -21,6 +22,7 @@ export const COOLMATH_PICKS: ClassicGame[] = [
     height: 600,
     shelf: "coolmath",
     gdId: "e103db40071a4af38aab2061bf799455",
+    gdPublishSlug: "run-3",
   },
   {
     slug: "coolmath-fireboy-watergirl",
@@ -31,6 +33,7 @@ export const COOLMATH_PICKS: ClassicGame[] = [
     height: 600,
     shelf: "coolmath",
     gdId: "a55c9cc9c21e4fc683c8c6857f3d0c75",
+    gdPublishSlug: "fireboy-and-watergirl-1-forest-temple",
   },
   {
     slug: "coolmath-hardest-game",
@@ -41,6 +44,7 @@ export const COOLMATH_PICKS: ClassicGame[] = [
     height: 600,
     shelf: "coolmath",
     gdId: "1e2400b542644c108c3b394739250ff0",
+    gdPublishSlug: "hardest-game-on-earth",
   },
   {
     slug: "coolmath-stickman-hook",
@@ -51,6 +55,7 @@ export const COOLMATH_PICKS: ClassicGame[] = [
     height: 900,
     shelf: "coolmath",
     gdId: "c3b949ea22c5478e8f2942fb2a3f1127",
+    gdPublishSlug: "stickman-hook",
   },
   {
     slug: "coolmath-basket-random",
@@ -61,5 +66,6 @@ export const COOLMATH_PICKS: ClassicGame[] = [
     height: 600,
     shelf: "coolmath",
     gdId: "bf1268dccb5d43e7970bb3edaa54afc8",
+    gdPublishSlug: "basket-random",
   },
 ];
