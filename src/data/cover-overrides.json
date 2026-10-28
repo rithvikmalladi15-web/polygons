@@ -9,5 +9,9 @@
   "unblock-totris": ["https://abc.cloudfree.jp/totris/screen1.jpg"],
   "unblock-rolling-forests": ["https://abc.cloudfree.jp/rolling-forests/icon.png"],
   "unblock-connect3": ["https://abc.cloudfree.jp/connect3/thumbnail.jpg"],
-  "1v1-lol": ["https://opengraph.githubassets.com/1/1v1lol-free/1v1lol-free"]
+  "1v1-lol": ["https://opengraph.githubassets.com/1/1v1lol-free/1v1lol-free"],
+  "super-mario-64": ["https://opengraph.githubassets.com/1/mario64/mario64"],
+  "super-smash-flash-2": ["https://www.miniplay.com/images/games/super-smash-flash-2/super-smash-flash-2.jpg"],
+  "pac-man": ["https://img.gamedistribution.com/f86488c00d744c47b023e268db4a1b31-512x384.jpeg"],
+  "hockey-shootout": ["https://img.gamedistribution.com/f8ad9281a926476ca008b9ad86253831-512x384.jpeg"]
 }

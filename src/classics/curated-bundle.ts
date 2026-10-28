@@ -8,8 +8,9 @@ export const ABC_CLOUDFREE_GAMES = UNBLOCK_ABC.map((game) => ({
 }));
 
 /**
- * Top 100 browser games tweens (12–14) search for most — mapped to Polygons slugs.
- * Many are served from abc.cloudfree.jp; others use GD / mirrors already in the catalog.
+ * Saved 100-game bundle — staples from abc.cloudfree.jp UNBLOCK traffic, Coolmath-class
+ * hits (Run 3, OvO, Fireboy), and long-running GD embed leaders. No meme/brainrot filler;
+ * includes enduring classics (Mario 64, Super Smash Flash 2, Pac-Man).
  */
 export const TEEN_TOP_100: { rank: number; name: string; slug: string; host: "abc" | "gd" | "mirror" }[] = [
   { rank: 1, name: "Minecraft Classic", slug: "unblock-minecraft-classic", host: "abc" },
@@ -55,7 +56,7 @@ export const TEEN_TOP_100: { rank: number; name: string; slug: string; host: "ab
   { rank: 41, name: "Minecraft Pixel Warfare", slug: "minecraft-pixel-warfare", host: "gd" },
   { rank: 42, name: "Geometry Dash Horror", slug: "geometry-dash-horror", host: "gd" },
   { rank: 43, name: "Brawl Stars", slug: "brawl-stars", host: "mirror" },
-  { rank: 44, name: "Sprunki Monster Beats", slug: "teen-sprunki-monster-beats", host: "gd" },
+  { rank: 44, name: "Super Smash Flash 2", slug: "super-smash-flash-2", host: "mirror" },
   { rank: 45, name: "Scary Granny House", slug: "teen-scary-granny-house", host: "gd" },
   { rank: 46, name: "Rainbow Friends Jetpack", slug: "teen-rainbow-friends-jetpack", host: "gd" },
   { rank: 47, name: "Squid Game Shooter", slug: "teen-squid-game-shooter", host: "gd" },
@@ -102,12 +103,12 @@ export const TEEN_TOP_100: { rank: number; name: string; slug: string; host: "ab
   { rank: 88, name: "FNAF 3", slug: "fnaf-3", host: "mirror" },
   { rank: 89, name: "Doodle God", slug: "teen-doodle-god", host: "gd" },
   { rank: 90, name: "Tomb of the Mask", slug: "teen-tomb-of-the-mask", host: "gd" },
-  { rank: 91, name: "Hide from Angry Teacher", slug: "teen-angry-teacher-escape", host: "gd" },
-  { rank: 92, name: "Brainrot Evolution", slug: "teen-brainrot-evolution", host: "gd" },
-  { rank: 93, name: "Italian Brainrot Jigsaw", slug: "teen-italian-brainrot-jigsaw", host: "gd" },
+  { rank: 91, name: "Bad Ice-Cream 2", slug: "bad-ice-cream-2", host: "mirror" },
+  { rank: 92, name: "Super Mario 64", slug: "super-mario-64", host: "mirror" },
+  { rank: 93, name: "Pac-Man", slug: "pac-man", host: "gd" },
   { rank: 94, name: "Obby: Tsunami Escape", slug: "mobile-obby-tsunami", host: "gd" },
   { rank: 95, name: "Stickman Supreme Shooter", slug: "teen-stickman-supreme-shooter", host: "gd" },
-  { rank: 96, name: "Blox Escape", slug: "teen-blox-escape", host: "gd" },
+  { rank: 96, name: "Hockey Shootout", slug: "hockey-shootout", host: "gd" },
   { rank: 97, name: "Slope Extra", slug: "slope-extra", host: "gd" },
   { rank: 98, name: "Join Clash 3D", slug: "join-clash-3d", host: "gd" },
   { rank: 99, name: "Tennis Masters", slug: "tennis-masters", host: "gd" },

@@ -28,7 +28,7 @@ while ((m = teenRe.exec(teenText)) !== null) {
 
 const out = {
   updated: new Date().toISOString().slice(0, 10),
-  note: "abc.cloudfree.jp (not Cloudflare). Teen list = ages 12–14 popularity + school-site staples.",
+  note: "abc.cloudfree.jp UNBLOCK staples + Coolmath-class hits + GD classics. Brainrot/meme clones excluded.",
   abcCloudfree: { count: abcGames.length, games: abcGames },
   teenTop100: { count: teenTop100.length, games: teenTop100 },
 };

@@ -1,6 +1,6 @@
 {
   "updated": "2026-10-28",
-  "note": "abc.cloudfree.jp (not Cloudflare). Teen list = ages 12–14 popularity + school-site staples.",
+  "note": "abc.cloudfree.jp UNBLOCK staples + Coolmath-class hits + GD classics. Brainrot/meme clones excluded.",
   "abcCloudfree": {
     "count": 59,
     "games": [
@@ -564,9 +564,9 @@
       },
       {
         "rank": 44,
-        "name": "Sprunki Monster Beats",
-        "slug": "teen-sprunki-monster-beats",
-        "host": "gd"
+        "name": "Super Smash Flash 2",
+        "slug": "super-smash-flash-2",
+        "host": "mirror"
       },
       {
         "rank": 45,
@@ -846,20 +846,20 @@
       },
       {
         "rank": 91,
-        "name": "Hide from Angry Teacher",
-        "slug": "teen-angry-teacher-escape",
-        "host": "gd"
+        "name": "Bad Ice-Cream 2",
+        "slug": "bad-ice-cream-2",
+        "host": "mirror"
       },
       {
         "rank": 92,
-        "name": "Brainrot Evolution",
-        "slug": "teen-brainrot-evolution",
-        "host": "gd"
+        "name": "Super Mario 64",
+        "slug": "super-mario-64",
+        "host": "mirror"
       },
       {
         "rank": 93,
-        "name": "Italian Brainrot Jigsaw",
-        "slug": "teen-italian-brainrot-jigsaw",
+        "name": "Pac-Man",
+        "slug": "pac-man",
         "host": "gd"
       },
       {
@@ -876,8 +876,8 @@
       },
       {
         "rank": 96,
-        "name": "Blox Escape",
-        "slug": "teen-blox-escape",
+        "name": "Hockey Shootout",
+        "slug": "hockey-shootout",
         "host": "gd"
       },
       {
