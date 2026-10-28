@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties }
 import { classicBySlug, classicEmbedCandidates, classicExternalPlayUrl, classicSameOriginPlayerUrl, recommendGames } from "../classics";
 import { GamePickCard } from "../components/GamePickCard";
 import { GameEmbedFrame } from "../components/GameEmbedFrame";
+import { GameStartGate } from "../components/GameStartGate";
 import { exitDocumentFullscreen, isElementFullscreen, requestElementFullscreen } from "../lib/fullscreen";
 import { recordGamePlay } from "../lib/play-stats";
 import { classicBack, Link } from "../route";
@@ -18,6 +19,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
   const [fullscreen, setFullscreen] = useState(false);
   const [embedFailed, setEmbedFailed] = useState(false);
   const [stuck, setStuck] = useState(false);
+  const [started, setStarted] = useState(false);
 
   const related = useMemo(() => (game ? recommendGames(game, 10) : []), [game]);
 
@@ -25,12 +27,13 @@ export function ClassicPlay({ slug }: { slug: string }) {
     setSourceIndex(0);
     setEmbedFailed(false);
     setStuck(false);
+    setStarted(false);
   }, [game?.slug]);
 
   useEffect(() => {
-    if (!game?.slug) return;
+    if (!game?.slug || !started) return;
     recordGamePlay(game.slug);
-  }, [game?.slug]);
+  }, [game?.slug, started]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -108,7 +111,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
           <button type="button" className="btn btn-line" onClick={scrollToRecommend}>
             More like this
           </button>
-          {candidates.length > 1 && (
+          {started && candidates.length > 1 && (
             <button type="button" className="btn btn-line" onClick={tryNextSource}>
               Switch source
             </button>
@@ -133,7 +136,11 @@ export function ClassicPlay({ slug }: { slug: string }) {
         className={`embed-viewport${fullscreen ? " embed-viewport-fs" : ""}`}
         style={embedVars}
       >
-        {embedFailed ? (
+        {!started ? (
+          <div className="embed-shell">
+            <GameStartGate game={game} onStart={() => setStarted(true)} />
+          </div>
+        ) : embedFailed ? (
           <div className="embed-fallback">
             <p>We couldn’t load this game in the player.</p>
             <button type="button" className="btn btn-green" onClick={restartSources}>
@@ -156,7 +163,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
           />
         )}
       </div>
-      {stuck && !embedFailed && (
+      {started && stuck && !embedFailed && (
         <div className="play-stuck-banner">
           <p>Still blank? The host may be blocking the embed.</p>
           <button type="button" className="btn btn-line" onClick={tryNextSource}>
@@ -169,9 +176,15 @@ export function ClassicPlay({ slug }: { slug: string }) {
       )}
       <p className="goal">{game.line}</p>
       <p className="hint in-tab">
-        Click inside the player to start. Games load on Polygons (<code>/_abc</code>, <code>/_gd</code>,{" "}
-        <code>/_ext</code>). Source {sourceIndex + 1} of {candidates.length}. Use{" "}
-        <strong>Switch source</strong> if the frame stays blank.
+        {started ? (
+          <>
+            Click inside the player to control. Loaded on Polygons (<code>/_abc</code>, <code>/_gd</code>,{" "}
+            <code>/_ext</code>). Source {sourceIndex + 1} of {candidates.length}. Use{" "}
+            <strong>Switch source</strong> if the frame stays blank.
+          </>
+        ) : (
+          <>Press <strong>Play {game.name}</strong> above to start the proxy — nothing loads until then.</>
+        )}
       </p>
 
       <section className="recommend-block" id="game-recommend" ref={recommendRef}>

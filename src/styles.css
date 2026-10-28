@@ -416,6 +416,31 @@ a.game-pick-card {
   opacity: 0;
   visibility: hidden;
 }
+.embed-start-gate {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  gap: 14px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(7, 11, 20, 0.96);
+}
+.embed-start-gate .embed-start-poster {
+  width: min(100%, 380px);
+  margin: 0 auto;
+}
+.embed-start-gate-compact {
+  gap: 10px;
+  padding: 14px;
+}
+.embed-start-gate-compact .embed-start-poster {
+  width: min(100%, 280px);
+}
+.embed-start-gate-compact .hint {
+  font-size: 11px;
+}
 .play-stuck-banner {
   display: flex;
   flex-wrap: wrap;
@@ -693,6 +718,7 @@ a.panel { display: block; }
 .lib-dock-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 .btn-sm { padding: 6px 12px; font-size: 13px; }
 .lib-dock-frame {
+  position: relative;
   flex: 1;
   min-height: 220px;
   display: grid;

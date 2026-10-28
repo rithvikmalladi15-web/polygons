@@ -193,7 +193,7 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
           ) : (
             <aside className="lib-dock lib-dock-empty" aria-label="Game player">
               <p className="kicker tiny">Side player</p>
-              <p className="hint">Choose a game — it plays here while you browse. Everything stays on Polygons.</p>
+              <p className="hint">Choose a game, then press Play in the panel — the proxy loads only when you start.</p>
             </aside>
           )}
         </div>
