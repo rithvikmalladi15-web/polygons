@@ -151,6 +151,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
             fillViewport={fullscreen}
             stuck={stuck}
             onStuck={markStuck}
+            onLoadError={tryNextSource}
           />
         )}
       </div>
@@ -192,6 +193,7 @@ function EmbedFrame({
   fillViewport,
   stuck,
   onStuck,
+  onLoadError,
 }: {
   game: ClassicGame;
   src: string;
@@ -200,6 +202,7 @@ function EmbedFrame({
   fillViewport: boolean;
   stuck: boolean;
   onStuck: () => void;
+  onLoadError?: () => void;
 }) {
   const [loading, setLoading] = useState(true);
 
@@ -232,6 +235,10 @@ function EmbedFrame({
         loading="eager"
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-downloads"
         onLoad={() => setLoading(false)}
+        onError={() => {
+          setLoading(false);
+          onLoadError?.();
+        }}
       />
       {stuck && !loading && (
         <div className="embed-stuck-hint">

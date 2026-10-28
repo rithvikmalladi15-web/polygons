@@ -4,6 +4,24 @@ import { localGamePath, proxyPath, siteOrigin } from "./game-origin";
 
 const GD_HOME = "https://gamedistribution.com/";
 
+/** Folder URLs must hit index.html on abc/GD/github — not on Nitrome CDN. */
+function withIndexHtml(external: string): string {
+  if (!external || external.includes("embed.gamedistribution.com/?")) return external;
+  const [base, query] = external.split("?");
+  if (base.endsWith(".html") || base.endsWith(".htm") || base.endsWith("/embed")) return external;
+  if (base.includes("cdn.nitrome.com")) return external;
+  if (base.endsWith("/")) return query ? `${base}index.html?${query}` : `${base}index.html`;
+  return external;
+}
+
+function finalizeProxyPath(path: string): string {
+  if (!path.startsWith("/")) return path;
+  if (path.endsWith("/index.html")) return path;
+  if (path.startsWith("/_ext/nitrome/")) return path.replace(/\/$/, "");
+  if (path.endsWith("/")) return `${path}index.html`;
+  return path;
+}
+
 function abcExternalUrl(abcPath: string): string {
   const path = abcPath.replace(/^\//, "");
   if (path.endsWith(".html") && !path.includes("/")) {
@@ -30,27 +48,32 @@ export function classicEmbedCandidates(game: ClassicGame): string[] {
   if (local) pushUnique(out, local);
 
   if (game.abcPath) {
-    pushUnique(out, proxyPath(abcExternalUrl(game.abcPath)));
+    pushUnique(out, finalizeProxyPath(proxyPath(abcExternalUrl(game.abcPath))));
   }
 
   if (game.directUrl) {
-    pushUnique(out, proxyPath(game.directUrl));
+    pushUnique(out, finalizeProxyPath(proxyPath(withIndexHtml(game.directUrl))));
   }
 
   if (game.gdId) {
     const path = game.gdId.endsWith("/") ? game.gdId : `${game.gdId}/`;
-    pushUnique(out, proxyPath(`https://html5.gamedistribution.com/${path}`));
+    pushUnique(
+      out,
+      finalizeProxyPath(proxyPath(withIndexHtml(`https://html5.gamedistribution.com/${path}`))),
+    );
 
     const referrers = new Set<string>([gameDistributionReferrer(game), GD_HOME]);
     for (const referrer of referrers) {
       pushUnique(
         out,
-        proxyPath(buildGameDistributionEmbedSrc(game.gdId, game.width, game.height, referrer)),
+        finalizeProxyPath(
+          proxyPath(buildGameDistributionEmbedSrc(game.gdId, game.width, game.height, referrer)),
+        ),
       );
     }
   }
 
-  const normalized = out.map((url) => (url.startsWith("http") ? proxyPath(url) : url));
+  const normalized = out.map((url) => (url.startsWith("http") ? finalizeProxyPath(proxyPath(url)) : url));
   const sameOrigin = normalized.filter((url) => url.startsWith("/"));
   return sameOrigin.length ? sameOrigin : normalized;
 }

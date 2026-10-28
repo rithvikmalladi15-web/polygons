@@ -62,6 +62,9 @@ export function GameDockPlayer({ slug, onClose }: Props) {
           allowFullScreen
           referrerPolicy="no-referrer-when-downgrade"
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-downloads"
+          onError={() => {
+            if (sourceIndex < candidates.length - 1) setSourceIndex((i) => i + 1);
+          }}
         />
       </div>
       <p className="hint lib-dock-hint">
