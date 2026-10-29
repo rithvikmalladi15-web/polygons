@@ -7,6 +7,12 @@ const GD_HOME = "https://gamedistribution.com/";
 /** Prefer mirror/local players — skip GameDistribution fallbacks that load third-party frames. */
 const POLYGONS_ONLY_SLUGS = new Set(["geometry-dash-classic", "1v1-lol"]);
 
+/** Extra same-origin fallbacks when the primary mirror is blank or blocked at school. */
+const SLUG_BACKUP_PATHS: Record<string, string[]> = {
+  "geometry-dash-classic": ["/_ext/scratch-gd/embed"],
+  "1v1-lol": ["/_ext/1v1-game/"],
+};
+
 const embedCandidateCache = new Map<string, string[]>();
 
 /** Folder URLs must hit index.html on abc/GD/github — not on Nitrome CDN. */
@@ -86,6 +92,11 @@ export function classicEmbedCandidates(game: ClassicGame): string[] {
   if (POLYGONS_ONLY_SLUGS.has(game.slug)) {
     sameOrigin = sameOrigin.filter((url) => !url.startsWith("/_gd/"));
   }
+
+  for (const extra of SLUG_BACKUP_PATHS[game.slug] ?? []) {
+    pushUnique(sameOrigin, extra);
+  }
+
   const result = sameOrigin.length ? sameOrigin : normalized.filter((url) => url.startsWith("/"));
   embedCandidateCache.set(game.slug, result);
   return result;

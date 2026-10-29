@@ -25,7 +25,10 @@ export function GameDockPlayer({ slug, onClose }: Props) {
 
   const tryNextSource = useCallback(() => {
     setStuck(false);
-    setSourceIndex((index) => Math.min(index + 1, candidates.length - 1));
+    setSourceIndex((index) => {
+      if (index < candidates.length - 1) return index + 1;
+      return index;
+    });
   }, [candidates.length]);
 
   if (!game || !src) {
@@ -76,7 +79,7 @@ export function GameDockPlayer({ slug, onClose }: Props) {
       </div>
       {started && stuck && (
         <p className="hint lib-dock-hint">
-          Still blank?{" "}
+          White or black screen?{" "}
           <button type="button" className="text-btn" onClick={tryNextSource}>
             Try another source
           </button>{" "}

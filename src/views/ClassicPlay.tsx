@@ -19,6 +19,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
   const recommendRef = useRef<HTMLElement>(null);
   const [fullscreen, setFullscreen] = useState(false);
   const [embedFailed, setEmbedFailed] = useState(false);
+  const [blockedHint, setBlockedHint] = useState(false);
   const [stuck, setStuck] = useState(false);
   const [started, setStarted] = useState(false);
 
@@ -27,6 +28,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
   useEffect(() => {
     setSourceIndex(0);
     setEmbedFailed(false);
+    setBlockedHint(false);
     setStuck(false);
     setStarted(false);
   }, [game?.slug]);
@@ -74,6 +76,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
 
   const restartSources = useCallback(() => {
     setEmbedFailed(false);
+    setBlockedHint(false);
     setStuck(false);
     setSourceIndex(0);
   }, []);
@@ -122,7 +125,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
               Player in new tab
             </a>
           )}
-          {fallbackExternal && (
+          {fallbackExternal && !blockedHint && (
             <a className="btn btn-ghost" href={fallbackExternal} target="_blank" rel="noopener noreferrer">
               Original host
             </a>
@@ -143,13 +146,24 @@ export function ClassicPlay({ slug }: { slug: string }) {
           </div>
         ) : embedFailed ? (
           <div className="embed-fallback">
-            <p>We couldn’t load this game in the player.</p>
+            <p>
+              {blockedHint
+                ? "This network may be blocking game traffic (filter or firewall). Polygons can’t bypass district rules — try Switch source, another game, or a custom domain your school allows."
+                : "We couldn’t load this game — blank or white screen usually means the source failed."}
+            </p>
+            {candidates.length > 1 && (
+              <button type="button" className="btn btn-line" onClick={tryNextSource}>
+                Switch source
+              </button>
+            )}
             <button type="button" className="btn btn-green" onClick={restartSources}>
               Try again
             </button>
-            <a className="btn btn-line" href={sameOriginPlayer || fallbackExternal} target="_blank" rel="noopener noreferrer">
-              Open player
-            </a>
+            {sameOriginPlayer && (
+              <a className="btn btn-line" href={sameOriginPlayer} target="_blank" rel="noopener noreferrer">
+                Open player in new tab
+              </a>
+            )}
           </div>
         ) : (
           <GameEmbedFrame
@@ -160,13 +174,14 @@ export function ClassicPlay({ slug }: { slug: string }) {
             fillViewport={fullscreen}
             stuck={stuck}
             onStuck={markStuck}
+            onBlocked={() => setBlockedHint(true)}
             onLoadError={tryNextSource}
           />
         )}
       </div>
       {started && stuck && !embedFailed && (
         <div className="play-stuck-banner">
-          <p>Still blank? The host may be blocking the embed.</p>
+          <p>White or black screen? Don’t refresh — try another source (same Polygons site, different mirror).</p>
           <button type="button" className="btn btn-line" onClick={tryNextSource}>
             Try another source
           </button>

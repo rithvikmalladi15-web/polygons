@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { ClassicGame } from "../classics";
+import { classifyEmbedDocument } from "../lib/embed-health";
 
 type Props = {
   game: ClassicGame;
@@ -10,10 +11,11 @@ type Props = {
   stuck?: boolean;
   onStuck?: () => void;
   onLoadError?: () => void;
+  onBlocked?: () => void;
   ratioStyle?: CSSProperties;
 };
 
-/** Proxied game iframe with non-blocking loading overlay and source fallback hooks. */
+/** Proxied game iframe with blank/block detection and source fallback hooks. */
 export function GameEmbedFrame({
   game,
   src,
@@ -23,13 +25,17 @@ export function GameEmbedFrame({
   stuck = false,
   onStuck,
   onLoadError,
+  onBlocked,
   ratioStyle,
 }: Props) {
   const [loading, setLoading] = useState(true);
   const loadedRef = useRef(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const healthCheckedRef = useRef(false);
 
   useEffect(() => {
     loadedRef.current = false;
+    healthCheckedRef.current = false;
     setLoading(true);
     const hint = window.setTimeout(() => onStuck?.(), 8_000);
     const reveal = window.setTimeout(() => setLoading(false), 4_000);
@@ -37,7 +43,7 @@ export function GameEmbedFrame({
       sourceCount > 1 && sourceIndex < sourceCount - 1
         ? window.setTimeout(() => {
             if (!loadedRef.current) onLoadError?.();
-          }, 16_000)
+          }, 14_000)
         : undefined;
     return () => {
       window.clearTimeout(hint);
@@ -46,9 +52,31 @@ export function GameEmbedFrame({
     };
   }, [src, onStuck, onLoadError, sourceCount, sourceIndex]);
 
+  const runHealthCheck = () => {
+    if (healthCheckedRef.current) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    try {
+      const health = classifyEmbedDocument(iframe.contentDocument);
+      healthCheckedRef.current = true;
+      if (health === "blocked") {
+        onBlocked?.();
+        onLoadError?.();
+        return;
+      }
+      if (health === "empty") {
+        onLoadError?.();
+      }
+    } catch {
+      /* cross-origin game document — rely on load + stuck timer */
+    }
+  };
+
   const finishLoad = () => {
     loadedRef.current = true;
     setLoading(false);
+    window.setTimeout(runHealthCheck, 1500);
+    window.setTimeout(runHealthCheck, 5000);
   };
 
   return (
@@ -69,6 +97,7 @@ export function GameEmbedFrame({
         )}
       </div>
       <iframe
+        ref={iframeRef}
         key={src}
         className="embed-frame"
         title={game.name}
@@ -86,7 +115,7 @@ export function GameEmbedFrame({
       />
       {stuck && !loading && (
         <div className="embed-stuck-hint">
-          <p>Not loading?</p>
+          <p>Still blank? Try Switch source — some school networks block game CDNs.</p>
         </div>
       )}
     </div>

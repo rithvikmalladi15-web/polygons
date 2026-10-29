@@ -2,7 +2,6 @@
  * Verify all 100 bundle games have a working proxied embed on production.
  * Usage: SITE=https://polygons2.vercel.app npm run verify:live
  */
-import { readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { pathToFileURL } from "node:url";
@@ -12,14 +11,18 @@ const SITE = (process.env.SITE ?? "https://polygons2.vercel.app").replace(/\/$/,
 
 const { CLASSICS } = await import(pathToFileURL(resolve(root, "src/classics/index.ts")).href);
 const { classicEmbedCandidates } = await import(pathToFileURL(resolve(root, "src/lib/embed.ts")).href);
+const { isLikelyBlockedHtml } = await import(pathToFileURL(resolve(root, "src/lib/embed-health.ts")).href);
 
 async function checkPath(path) {
   const url = `${SITE}${path.startsWith("/") ? path : `/${path}`}`;
   try {
     const res = await fetch(url, { method: "GET", redirect: "follow" });
     const vercelErr = res.headers.get("x-vercel-error");
-    const ok = res.ok && vercelErr !== "NOT_FOUND";
-    return { url, status: res.status, ok, vercelErr };
+    const text = await res.text();
+    const blocked = isLikelyBlockedHtml(text);
+    const tooSmall = text.length < 64;
+    const ok = res.ok && vercelErr !== "NOT_FOUND" && !blocked && !tooSmall;
+    return { url, status: res.status, ok, vercelErr, blocked, tooSmall, bytes: text.length };
   } catch (e) {
     return { url, status: 0, ok: false, err: String(e) };
   }
