@@ -5,6 +5,7 @@ import { SITE_NAME } from "../brand";
 import { Footer } from "../components/Footer";
 import { GameThumb } from "../components/GameThumb";
 import { go, Link, openRandomClassic } from "../route";
+import { perfMode } from "../lib/perf";
 
 const HERO_GAME = SPOTLIGHT[0];
 
@@ -47,6 +48,7 @@ export function Home() {
   const recommended = useMemo(() => curatedHomePicks(8), []);
 
   const ticker = useMemo(() => {
+    if (perfMode() === "lite") return SPOTLIGHT.map((game) => game.name);
     const names = SPOTLIGHT.map((game) => game.name);
     for (let i = 0; i < 28; i++) {
       names.push(CLASSICS[(i * 41) % CLASSICS.length]?.name ?? "Polygons");
@@ -110,10 +112,12 @@ export function Home() {
         </div>
       </section>
 
-      <div className="marquee" aria-hidden="true">
-        <Ticker items={ticker} />
-        <Ticker items={ticker} reverse />
-      </div>
+      {perfMode() === "full" && (
+        <div className="marquee" aria-hidden="true">
+          <Ticker items={ticker} />
+          <Ticker items={ticker} reverse />
+        </div>
+      )}
 
       <section className="section" id="how">
         <div className="wrap">

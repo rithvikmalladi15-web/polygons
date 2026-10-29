@@ -821,3 +821,38 @@ a.panel { display: block; }
   html { scroll-behavior: auto; }
   .ticker { animation: none; }
 }
+
+/* Chromebooks & low-end devices (see src/lib/perf.ts + index.html boot script) */
+html[data-perf="lite"] {
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --serif: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --card-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+html[data-perf="lite"] .nav.paper {
+  backdrop-filter: none;
+  background: var(--cream);
+}
+html[data-perf="lite"] .marquee {
+  display: none;
+}
+html[data-perf="lite"] .device,
+html[data-perf="lite"] .play-stage,
+html[data-perf="lite"] .embed-viewport {
+  box-shadow: var(--card-shadow);
+}
+html[data-perf="lite"] .game-pick-card,
+html[data-perf="lite"] .hit-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 260px 300px;
+}
+html[data-perf="lite"] .embed-loading,
+html[data-perf="lite"] .card-thumb img {
+  transition: none;
+}
+html[data-perf="lite"] .hero {
+  min-height: auto;
+  padding: 96px 0 56px;
+}
+html[data-perf="lite"] .lib-split-body {
+  contain: layout style;
+}

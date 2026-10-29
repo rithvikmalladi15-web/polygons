@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ClassicGame } from "../classics";
 import { gameThumbCandidates } from "../lib/thumb";
+import { perfMode } from "../lib/perf";
 import { thumbFallbackStyle } from "../lib/thumbFallback";
 
 type Props = {
@@ -20,6 +21,8 @@ export function GameThumb({ game, className = "", priority = false }: Props) {
 
   const rootClass = ["card-thumb", className].filter(Boolean).join(" ");
 
+  const eager = priority && perfMode() === "full";
+
   return (
     <div className={rootClass} style={thumbFallbackStyle(game.slug)}>
       <img
@@ -27,9 +30,9 @@ export function GameThumb({ game, className = "", priority = false }: Props) {
         alt=""
         width={512}
         height={384}
-        loading={priority ? "eager" : "lazy"}
+        loading={eager ? "eager" : "lazy"}
         decoding="async"
-        fetchPriority={priority ? "high" : "low"}
+        fetchPriority={eager ? "high" : "low"}
         referrerPolicy="no-referrer"
         className="card-thumb-img"
         onError={() => {

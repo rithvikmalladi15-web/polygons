@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, openRandomClassic, useLocationKey } from "../route";
+import { onScrollThrottled } from "../lib/perf";
 import { LogoMark, LogoWordmark } from "./Logo";
 
 export function Nav() {
@@ -9,10 +10,9 @@ export function Nav() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const sync = () => setScrolled(window.scrollY > 8);
+    sync();
+    return onScrollThrottled(window, sync);
   }, []);
 
   useEffect(() => {

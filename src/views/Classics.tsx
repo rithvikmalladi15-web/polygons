@@ -3,11 +3,11 @@ import { classicCount, filterClassics, randomClassicSlug, type ClassicShelf } fr
 import { Footer } from "../components/Footer";
 import { GamePickCard } from "../components/GamePickCard";
 import { GameDockPlayer, libraryPlayParam, setLibraryPlay } from "../components/GameDockPlayer";
+import { libraryPageSize, onScrollThrottled, priorityThumbCount, searchDebounceMs } from "../lib/perf";
+import { useDebouncedValue } from "../lib/useDebouncedValue";
 import { Link, go, useLocationKey } from "../route";
 
 type ShelfFilter = ClassicShelf | "all";
-
-const PAGE = 24;
 
 const SHELVES: { id: ShelfFilter; label: string }[] = [
   { id: "all", label: "All" },
@@ -22,19 +22,21 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
   const [q, setQ] = useState(() => new URLSearchParams(location.search).get("q") ?? "");
   const dockSlug = embedded ? libraryPlayParam() : null;
   const [shelf, setShelf] = useState<ShelfFilter>("all");
-  const [limit, setLimit] = useState(PAGE);
+  const pageSize = libraryPageSize();
+  const [limit, setLimit] = useState(pageSize);
   const [headCompact, setHeadCompact] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const hits = useMemo(() => filterClassics(q, shelf), [q, shelf]);
+  const qFilter = useDebouncedValue(q, searchDebounceMs());
+  const hits = useMemo(() => filterClassics(qFilter, shelf), [qFilter, shelf]);
   const total = classicCount("all");
   const visible = hits.slice(0, limit);
 
   useEffect(() => {
-    setLimit(PAGE);
+    setLimit(pageSize);
     setHeadCompact(false);
     scrollRef.current?.scrollTo({ top: 0 });
     if (!embedded) window.scrollTo({ top: 0 });
-  }, [q, shelf, embedded]);
+  }, [qFilter, shelf, embedded, pageSize]);
 
   useEffect(() => {
     const fromUrl = new URLSearchParams(location.search).get("q") ?? "";
@@ -54,35 +56,31 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
         history.replaceState({}, "", want);
         window.dispatchEvent(new Event("polygons-nav"));
       }
-    }, 280);
+    }, searchDebounceMs());
     return () => window.clearTimeout(timer);
   }, [q, embedded]);
 
   useEffect(() => {
     const root = scrollRef.current;
     if (!root) return;
-    const onScroll = () => {
+    return onScrollThrottled(root, () => {
       setHeadCompact(root.scrollTop > 48);
       if (limit >= hits.length) return;
       if (root.scrollTop + root.clientHeight >= root.scrollHeight - 320) {
-        setLimit((value) => Math.min(value + PAGE, hits.length));
+        setLimit((value) => Math.min(value + pageSize, hits.length));
       }
-    };
-    root.addEventListener("scroll", onScroll, { passive: true });
-    return () => root.removeEventListener("scroll", onScroll);
-  }, [hits.length, limit, embedded]);
+    });
+  }, [hits.length, limit, embedded, pageSize]);
 
   useEffect(() => {
     if (!embedded) return;
-    const onWindowScroll = () => {
+    return onScrollThrottled(window, () => {
       if (limit >= hits.length) return;
       if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 400) {
-        setLimit((value) => Math.min(value + PAGE, hits.length));
+        setLimit((value) => Math.min(value + pageSize, hits.length));
       }
-    };
-    window.addEventListener("scroll", onWindowScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onWindowScroll);
-  }, [embedded, hits.length, limit]);
+    });
+  }, [embedded, hits.length, limit, pageSize]);
 
   const head = (
     <div className={embedded ? "wrap lib-head" : "wrap"}>
@@ -153,14 +151,14 @@ export function Classics({ embedded = false }: { embedded?: boolean }) {
           <GamePickCard
             key={game.slug}
             game={game}
-            priorityThumb={index < 8}
+            priorityThumb={index < priorityThumbCount()}
             playTarget={embedded ? "dock" : "page"}
           />
         ))}
       </div>
       {limit < hits.length && (
         <div className="lib-more">
-          <button type="button" className="btn btn-line" onClick={() => setLimit((n) => Math.min(n + PAGE, hits.length))}>
+          <button type="button" className="btn btn-line" onClick={() => setLimit((n) => Math.min(n + pageSize, hits.length))}>
             Load more
           </button>
         </div>

@@ -5,6 +5,7 @@ import { GameEmbedFrame } from "../components/GameEmbedFrame";
 import { GameStartGate } from "../components/GameStartGate";
 import { exitDocumentFullscreen, isElementFullscreen, requestElementFullscreen } from "../lib/fullscreen";
 import { recordGamePlay } from "../lib/play-stats";
+import { recommendCount } from "../lib/perf";
 import { classicBack, Link } from "../route";
 
 export function ClassicPlay({ slug }: { slug: string }) {
@@ -21,7 +22,7 @@ export function ClassicPlay({ slug }: { slug: string }) {
   const [stuck, setStuck] = useState(false);
   const [started, setStarted] = useState(false);
 
-  const related = useMemo(() => (game ? recommendGames(game, 10) : []), [game]);
+  const related = useMemo(() => (game ? recommendGames(game, recommendCount()) : []), [game]);
 
   useEffect(() => {
     setSourceIndex(0);
