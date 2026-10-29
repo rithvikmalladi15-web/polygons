@@ -54,6 +54,19 @@ if (badPaths) {
 }
 
 const bad = results.filter((r) => !r.ok);
+let offSite = 0;
+for (const game of CLASSICS) {
+  const paths = classicEmbedCandidates(game);
+  if (!paths.length || !paths.every((p) => p.startsWith("/"))) {
+    offSite++;
+    console.log(JSON.stringify({ slug: game.slug, issue: "not same-origin", paths: paths.slice(0, 3) }));
+  }
+}
+if (offSite) {
+  console.error(`Same-origin check failed for ${offSite} games`);
+  process.exit(1);
+}
+
 console.log(`SITE ${SITE} — OK ${results.length - bad.length}/${CLASSICS.length}, FAIL ${bad.length}`);
 for (const r of bad) console.log(JSON.stringify(r));
 

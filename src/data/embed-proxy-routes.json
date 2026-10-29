@@ -60,6 +60,18 @@
     "target": "https://crazy-cattle.github.io/iframe"
   },
   {
+    "id": "1v1-game",
+    "from": "https://classroom2111.github.io/g77/class-439/",
+    "to": "/_ext/1v1-game/",
+    "target": "https://classroom2111.github.io/g77/class-439"
+  },
+  {
+    "id": "geometrydashs",
+    "from": "https://geometrydashs.com/",
+    "to": "/_ext/geometrydashs/",
+    "target": "https://geometrydashs.com"
+  },
+  {
     "id": "1v1lol",
     "from": "https://1v1lol-free.github.io/",
     "to": "/_ext/1v1lol/",

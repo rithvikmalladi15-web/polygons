@@ -9,6 +9,8 @@ dist
 # Mirrored game assets (large). Run npm run games:mirror before deploy, or use build:vercel-hosted on Vercel.
 public/games/*
 !public/games/.gitkeep
+!public/games/geometry-dash-classic/
+!public/games/geometry-dash-classic/**
 
 # Downloaded card art (run npm run covers:fetch). Commit these for cover art on Vercel.
 # public/covers/*.jpg

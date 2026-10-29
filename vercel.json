@@ -79,6 +79,14 @@
       "destination": "https://playgeckogames.github.io/games/game11/:path*"
     },
     {
+      "source": "/_ext/1v1-game",
+      "destination": "https://classroom2111.github.io/g77/class-439/"
+    },
+    {
+      "source": "/_ext/1v1-game/:path*",
+      "destination": "https://classroom2111.github.io/g77/class-439/:path*"
+    },
+    {
       "source": "/_ext/slope",
       "destination": "https://staticquasar931.github.io/slope/"
     },
@@ -173,6 +181,14 @@
     {
       "source": "/_ext/mario64/:path*",
       "destination": "https://mario64.vercel.app/:path*"
+    },
+    {
+      "source": "/_ext/geometrydashs",
+      "destination": "https://geometrydashs.com/"
+    },
+    {
+      "source": "/_ext/geometrydashs/:path*",
+      "destination": "https://geometrydashs.com/:path*"
     },
     {
       "source": "/_abc",

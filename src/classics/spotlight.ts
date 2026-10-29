@@ -118,7 +118,7 @@ export const SPOTLIGHT: ClassicGame[] = [
     width: 1280,
     height: 720,
     shelf: "spotlight",
-    directUrl: "https://1v1lol-free.github.io/",
+    directUrl: "https://classroom2111.github.io/g77/class-439/",
   },
   {
     slug: "slope-extra",

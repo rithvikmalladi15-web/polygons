@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Geometry Dash · Polygons</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #0b1020;
+        color: #e8f0ff;
+        font-family: system-ui, sans-serif;
+      }
+      #wrap {
+        display: grid;
+        place-items: center;
+        height: 100%;
+        gap: 12px;
+        padding: 12px;
+        box-sizing: border-box;
+      }
+      #unity-canvas {
+        width: min(100vw - 24px, 1280px);
+        height: min(100vh - 120px, 720px);
+        background: #000;
+        border-radius: 8px;
+      }
+      .btn {
+        border: 0;
+        border-radius: 8px;
+        padding: 12px 22px;
+        font-weight: 650;
+        font-size: 16px;
+        background: #2563eb;
+        color: #fff;
+        cursor: pointer;
+      }
+      #bar {
+        display: none;
+        width: min(100vw - 24px, 420px);
+        height: 8px;
+        background: #1e293b;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      #bar > div {
+        height: 100%;
+        width: 0%;
+        background: #60a5fa;
+        transition: width 0.15s linear;
+      }
+      .hint {
+        font-size: 13px;
+        opacity: 0.75;
+        text-align: center;
+        max-width: 28rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <canvas id="unity-canvas" width="1280" height="720"></canvas>
+      <div id="bar"><div id="bar-fill"></div></div>
+      <button type="button" class="btn" id="play">Play</button>
+      <p class="hint">Loads on Polygons (/_ext/geometrydashs) — press Play to start.</p>
+    </div>
+    <script>
+      (function () {
+        var root = location.origin;
+        var buildUrl = root + "/_ext/geometrydashs/game/geometry-dash-lite/Build";
+        var loaderUrl = buildUrl + "/geometry-dash-lite.loader.js";
+        var config = {
+          dataUrl: buildUrl + "/geometry-dash-lite.data",
+          frameworkUrl: buildUrl + "/geometry-dash-lite.framework.js",
+          codeUrl: buildUrl + "/geometry-dash-lite.wasm",
+          streamingAssetsUrl: root + "/_ext/geometrydashs/game/geometry-dash-lite/StreamingAssets",
+          companyName: "Greenlight",
+          productName: "Geometry Dash Lite",
+          productVersion: "1.0.1",
+        };
+        var canvas = document.getElementById("unity-canvas");
+        var play = document.getElementById("play");
+        var bar = document.getElementById("bar");
+        var barFill = document.getElementById("bar-fill");
+
+        play.addEventListener(
+          "click",
+          function () {
+            play.style.display = "none";
+            bar.style.display = "block";
+            var script = document.createElement("script");
+            script.src = loaderUrl;
+            script.onload = function () {
+              createUnityInstance(canvas, config, function (progress) {
+                barFill.style.width = progress * 100 + "%";
+              })
+                .then(function () {
+                  bar.style.display = "none";
+                })
+                .catch(function (message) {
+                  alert(message);
+                  play.style.display = "block";
+                  bar.style.display = "none";
+                });
+            };
+            script.onerror = function () {
+              alert("Could not load the game files. Try again later.");
+              play.style.display = "block";
+              bar.style.display = "none";
+            };
+            document.body.appendChild(script);
+          },
+          { once: true },
+        );
+      })();
+    </script>
+  </body>
+</html>

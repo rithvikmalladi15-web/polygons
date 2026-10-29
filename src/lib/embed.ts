@@ -4,6 +4,9 @@ import { localGamePath, proxyPath, siteOrigin } from "./game-origin";
 
 const GD_HOME = "https://gamedistribution.com/";
 
+/** Prefer mirror/local players — skip GameDistribution fallbacks that load third-party frames. */
+const POLYGONS_ONLY_SLUGS = new Set(["geometry-dash-classic", "1v1-lol"]);
+
 const embedCandidateCache = new Map<string, string[]>();
 
 /** Folder URLs must hit index.html on abc/GD/github — not on Nitrome CDN. */
@@ -79,8 +82,11 @@ export function classicEmbedCandidates(game: ClassicGame): string[] {
   }
 
   const normalized = out.map((url) => (url.startsWith("http") ? finalizeProxyPath(proxyPath(url)) : url));
-  const sameOrigin = normalized.filter((url) => url.startsWith("/"));
-  const result = sameOrigin.length ? sameOrigin : normalized;
+  let sameOrigin = normalized.filter((url) => url.startsWith("/"));
+  if (POLYGONS_ONLY_SLUGS.has(game.slug)) {
+    sameOrigin = sameOrigin.filter((url) => !url.startsWith("/_gd/"));
+  }
+  const result = sameOrigin.length ? sameOrigin : normalized.filter((url) => url.startsWith("/"));
   embedCandidateCache.set(game.slug, result);
   return result;
 }
@@ -93,12 +99,12 @@ export function classicEmbedSrc(game: ClassicGame): string {
 export function classicExternalPlayUrl(game: ClassicGame): string {
   if (game.directUrl) return game.directUrl;
   if (game.abcPath) return abcExternalUrl(game.abcPath);
+  const local = localGamePath(game.slug);
+  if (local && siteOrigin()) return `${siteOrigin()}${local}`;
   if (game.gdId) {
     const path = game.gdId.endsWith("/") ? game.gdId : `${game.gdId}/`;
     return `https://html5.gamedistribution.com/${path}`;
   }
-  const local = localGamePath(game.slug);
-  if (local && siteOrigin()) return `${siteOrigin()}${local}`;
   return "";
 }
 
